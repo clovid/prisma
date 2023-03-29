@@ -1,0 +1,16 @@
+.cf--login--wrapper {
+	/*http://shop.farbnische.de/fani/fani-limette-2/*/
+	/*important: we need copyrights before we go live*/
+	background-image: url('../images/login/login_teaser.jpg');
+	background-size: cover;
+	background-position: right;
+}
+
+.cf--login--box {
+	background-color: #fff;
+}
+
+.cf--login--submit {
+	min-width: 150px;
+	min-height: 48px;
+}

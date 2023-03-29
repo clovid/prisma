@@ -1,0 +1,32 @@
+<md-menu>
+  <md-button aria-label="Menü" class="md-icon-button" ng-click="$mdMenu.open($event)">
+    <md-icon>arrow_drop_down_circle</md-icon>
+  </md-button>
+  <md-menu-content width="4">
+    <md-menu-item>
+      <md-button>
+        <md-icon>account_circle</md-icon>
+        {{ 'toolbar.menu.loggedInAs' | translate }} {{ vm.user.login }}<span ng-if="vm.user.is_admin"> (Admin)</span>
+      </md-button>
+    </md-menu-item>
+    <md-menu-item ng-if="vm.user.is_admin">
+      <md-button ui-sref="admin.users">
+        <md-icon>people</md-icon>
+        {{ 'toolbar.menu.userManagement' | translate }}
+      </md-button>
+    </md-menu-item>
+    <md-menu-item class="lang-selector">
+      <md-icon>language</md-icon>
+      {{ 'toolbar.menu.language' | translate }}:
+      <md-button class="lang-selector-item" ng-repeat="lang in vm.availableLangs" ng-class="{clickable: vm.lang !== lang}" ng-disabled="vm.lang === lang" ng-click="vm.selectLang(lang)">
+        {{ lang | uppercase }}
+      </md-button>
+    </md-menu-item>
+    <md-menu-divider></md-menu-divider>
+    <md-menu-item>
+      <md-button ng-click="vm.logout()">
+        <md-icon>power_settings_new</md-icon>
+        {{ 'toolbar.menu.logout' | translate }}
+      </md-button>
+    </md-menu-item>
+</md-menu>

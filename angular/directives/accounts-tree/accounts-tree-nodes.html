@@ -1,0 +1,17 @@
+<div class="tree-item">
+	<div class="tree-item-toggle" ng-click="vm.toggleExpansion(account)" ng-if="!account.isLeave">
+		<span class="tree-caret" ng-class="{'tree-caret-right': !account.expanded, 'tree-caret-down': account.expanded}" aria-hidden="true"></span>
+	</div>
+	<div class="tree-item-wrapper" ng-click="vm.toggleSelection(account)" ng-class="{'selected': vm.isSelected(account)}">
+		<span>
+			<md-icon ng-if="vm.isSelected(account)">check_box</md-icon>
+			<md-icon ng-if="vm.isDeselected(account)">check_box_outline_blank</md-icon>
+			<md-icon ng-if="vm.isInderterminate(account)">indeterminate_check_box</md-icon>
+		</span>
+		<span class="tree-item-title">{{ ::account.name }}</span>
+	</div>
+</div>
+<ol ng-if="account.expanded">
+	<li ng-repeat="account in account.children" ng-include="'views/directives/accounts-tree/accounts-tree-nodes.html'">
+	</li>
+</ol>

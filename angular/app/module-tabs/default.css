@@ -1,0 +1,13 @@
+.module-tabs--default {
+    overflow: hidden;
+    height: 100%;
+}
+
+.module-tabs--default--questions {
+    margin-left: 28px;
+    overflow-y: scroll;
+}
+
+.module-tabs--default--questions > div {
+    margin: 8px 0;
+}

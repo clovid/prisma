@@ -1,0 +1,11 @@
+<div class="tree-item" ng-click="item.open = !item.open" ng-class="{'success': item.isCorrect}">
+	<div class="tree-item-toggle" ng-class="{hidden: !item.children}">
+		<span class="tree-caret" ng-class="{'tree-caret-right': !item.open, 'tree-caret-down': item.open}" aria-hidden="true"></span>
+	</div>
+	<div class="gf-dist-tree-value">{{ ::item.value }}</div>
+	<div class="gf-dist-tree-frequency">{{ ::item.frequency }}</div>
+</div>
+<ol ng-if="item.children" ng-show="item.open">
+	<li ng-repeat="item in item.children" ng-include="'views/directives/aggregation-types/grouped-frequency-distribution/grouped-frequency-distribution-nodes.html'">
+	</li>
+</ol>

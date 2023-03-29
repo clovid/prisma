@@ -39,4 +39,50 @@ return [
         'secret' => env('STRIPE_SECRET'),
     ],
 
+    'akzento' => [
+        'base-url' => env('AKZENTO_API_URL'),
+        /**
+         * 1: Vorklinik Human
+         * 2: Vorklinik Zahn
+         * 3: Klinik Human
+         * 4: Klinik Zahn
+         * @var array
+         */
+        'activated-groups' => [1, 3],
+    ],
+
+    'medforge' => [
+        'base-url' => env('MEDFORGE_API_URL'),
+        'auth-type' => 'oauth',
+        'oauth-url' => env('MEDFORGE_OAUTH_TOKEN_URL'),
+        'client-id' => env('MEDFORGE_OAUTH_CLIENT_ID'),
+        'client-secret' => env('MEDFORGE_OAUTH_CLIENT_SECRET'),
+    ],
+
+    'vquest' => [
+        'base-url' => env('VQUEST_API_URL'),
+        'auth-type' => 'token',
+        'api-token' => env('VQUEST_API_TOKEN'),
+    ],
+
+    'vquest-online' => [
+        'base-url' => env('VQUEST_ONLINE_API_URL'),
+        'auth-type' => 'token',
+        'api-token' => env('VQUEST_ONLINE_API_TOKEN'),
+    ],
+
+    'campus' => [
+        'base-url' => env('CAMPUS_API_URL'),
+        'auth-type' => 'token',
+        'api-token' => env('CAMPUS_API_TOKEN'),
+    ],
+
+    'omero' => [
+        'domain' => env('OMERO_API_URL'),
+        'base-url' => env('OMERO_API_URL') . 'api/v0/',
+        'username' => env('OMERO_API_USERNAME'),
+        'password' => env('OMERO_API_PASSWORD'),
+        'cookies' => true,
+        'session-timeout' => 2 * 60 * 60 // 2h in seconds
+    ],
 ];

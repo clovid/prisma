@@ -17,14 +17,21 @@ class Authenticate
      */
     public function handle($request, Closure $next, $guard = null)
     {
-        if (Auth::guard($guard)->guest()) {
-            if ($request->ajax() || $request->wantsJson()) {
-                return response('Unauthorized.', 401);
-            } else {
-                return redirect()->guest('login');
+        if (is_null($guard))
+            $guards = config('auth.guard-chain');
+        else
+            $guards = [$guard];
+
+        foreach ($guards as $guard) {
+            if (Auth::guard($guard)->check()) {
+                Auth::setDefaultDriver($guard);
+                return $next($request);
             }
         }
 
-        return $next($request);
+        return response()->json([
+            'success' => false,
+            'error' => 'Sie sind nicht eingeloggt.'
+        ], 401);
     }
 }

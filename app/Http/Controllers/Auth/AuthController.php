@@ -3,10 +3,11 @@
 namespace App\Http\Controllers\Auth;
 
 use App\User;
-use Validator;
 use App\Http\Controllers\Controller;
-use Illuminate\Foundation\Auth\ThrottlesLogins;
-use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
+
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Http\Request;
 
 class AuthController extends Controller
 {
@@ -21,7 +22,7 @@ class AuthController extends Controller
     |
     */
 
-    use AuthenticatesAndRegistersUsers, ThrottlesLogins;
+    use AuthenticatesUsers;
 
     /**
      * Where to redirect users after login / registration.
@@ -31,42 +32,74 @@ class AuthController extends Controller
     protected $redirectTo = '/';
 
     /**
-     * Create a new authentication controller instance.
+     * Attempt to log the user into the application.
+     * Overrides AuthenicatesUsers@attemptLogin
+     * Uses now more than one guard.
      *
-     * @return void
+     * @param  \Illuminate\Http\Request  $request
+     * @return bool
      */
-    public function __construct()
+    public function attemptLogin(Request $request)
     {
-        $this->middleware($this->guestMiddleware(), ['except' => 'logout']);
+        foreach (config('auth.guard-chain') as $guard) {
+            if (Auth::guard($guard)->attempt($this->credentials($request), $request->has('remember'))) {
+                // we have to set $guard to the default driver
+                Auth::setDefaultDriver($guard);
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
-     * Get a validator for an incoming registration request.
+     * Defines the response if the login succeed.
+     * Overrides AuthenticatesUsers@authenticated.
      *
-     * @param  array  $data
-     * @return \Illuminate\Contracts\Validation\Validator
+     * @param  \Illuminate\Http\Request $request
+     * @param  App\User  $user
+     * @return \Illuminate\Http\Response json-Response with user ticket.
      */
-    protected function validator(array $data)
+    protected function authenticated(Request $request, $user)
     {
-        return Validator::make($data, [
-            'name' => 'required|max:255',
-            'email' => 'required|email|max:255|unique:users',
-            'password' => 'required|min:6|confirmed',
+        return response()->json([
+            'user_ticket' => $user->user_ticket,
         ]);
     }
 
     /**
-     * Create a new user instance after a valid registration.
+     * Get the failed login response instance.
      *
-     * @param  array  $data
-     * @return User
+     * @param \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
      */
-    protected function create(array $data)
+    protected function sendFailedLoginResponse(Request $request)
     {
-        return User::create([
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'password' => bcrypt($data['password']),
+        return response()->json([
+            'success' => false,
+            'message' => 'invalid credentials'
+        ], 401);
+    }
+
+    /**
+     * Returns true if the user is logged in.
+     * @param  Request $request [description]
+     * @return json response
+     */
+    public function loginTest (Request $request)
+    {
+        return response()->json([
+            'success' => true,
+            'info' => 'Sie sind eingeloggt und berechtigt PRISMA zu benutzen.',
         ]);
+    }
+
+    /**
+     * The model property, that holds the name of the login user.
+     * @return string
+     * @override
+     */
+    public function username ()
+    {
+        return 'login';
     }
 }

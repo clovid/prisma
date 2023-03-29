@@ -1,0 +1,19 @@
+<div class="md-title" layout="row" layout-align="start center" ng-if="vm.collection.title || vm.collection.overlays">
+	<div ng-if="vm.collection.overlays">
+		<md-button ng-click="vm.showOverlay(question)" ng-show="vm.collection.showOverlay" class="md-icon-button" aria-label="Toggle Overlay">
+			<md-tooltip><span translate>questions.showRegion</span></md-tooltip>
+			<md-icon>visibility</md-icon>
+		</md-button>
+		<md-button ng-click="vm.showOverlay(question)" ng-hide="vm.collection.showOverlay" class="md-icon-button" aria-label="Toggle Overlay">
+			<md-tooltip><span translate>questions.hideRegion</span></md-tooltip>
+			<md-icon>visibility_off</md-icon>
+		</md-button>
+	</div>
+	<span>{{:: vm.collection.title }}</span>
+</div>
+<div ng-repeat="question in vm.collection.questions">
+	<div ld-question-open data="question" ng-if="question.type === 'open'"></div>
+	<div ld-question-basic data="question" ng-if="question.type === 'basic'"></div>
+	<div ld-question-marker data="question" ng-if="question.type === 'marker'"></div>
+	<div ld-frequency-distribution data="question" order-attribute="'value'" order-reverse="false" ng-if="question.type === 'frequency-distribution'"></div>
+</div>

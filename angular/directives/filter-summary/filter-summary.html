@@ -1,0 +1,35 @@
+<div class="filter-summary">
+	<div layout="row" layout-align="start center">
+		<div>
+			<md-icon>face</md-icon>
+		</div>
+		<div ng-if="!vm.users.length" class="filter-summary-badge filter-summary-placeholder" translate>toolbar.filter.noUserFilter</div>
+		<div ng-if="!!vm.users.length && vm.users.length <= vm.options.maxUsersDisplay" ng-repeat="user in vm.users" class="filter-summary-badge" title="{{ ::user.path }}">
+			{{ ::user.name }}<span ng-show="user.semesterName"> ({{ ::user.semesterName }})</span>
+		</div>
+		<div ng-if="!!vm.users.length && vm.users.length > vm.options.maxUsersDisplay" layout="row">
+			<div class="filter-summary-badge" ng-repeat="user in vm.users" ng-if="$index < vm.options.maxUsersDisplay - 1" title="{{ ::user.path }}">
+				{{ ::user.name }}<span ng-show="user.semesterName"> ({{ ::user.semesterName }})</span>
+			</div>
+			<div ng-dropover ng-dropover-options="{{ vm.options.dropover }}">
+				<div class="filter-summary-badge filter-summary-bag" translate translate-values="{datasets: vm.users.length - vm.options.maxUsersDisplay + 1}">toolbar.filter.moreDatasets</div>
+				<div ng-dropover-contents>
+					<div ng-repeat="user in vm.users" ng-if="$index >= vm.options.maxUsersDisplay - 1" title="{{ ::user.path }}">
+						{{ ::user.name }}<span ng-show="user.semesterName"> ({{ ::user.semesterName }})</span>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div layout="row" layout-align="start center">
+		<div>
+			<md-icon>access_time</md-icon>
+		</div>
+		<div ng-if="!vm.timespans.length" class="filter-summary-badge filter-summary-placeholder" translate>toolbar.filter.noTimeFilter</div>
+		<div ng-if="!!vm.timespans.length" layout="column">
+			<div ng-repeat="timespan in vm.timespans" class="filter-summary-badge">
+				{{ ::timespan[0] | date: "dd.MM.yyyy, HH:mm 'Uhr'" }} {{ 'toolbar.filter.timeTill' | translate }} {{ ::timespan[1] | date: "dd.MM.yyyy, HH:mm 'Uhr'" }}
+			</div>
+		</div>
+	</div>
+</div>

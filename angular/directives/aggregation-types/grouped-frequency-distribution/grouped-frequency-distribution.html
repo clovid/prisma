@@ -1,0 +1,11 @@
+<div class="ld--gf-dist">
+	<div class="gf-dist-head">
+		<div class="gf-dist-title" ng-click="vm.orderBy('value')">{{ ::vm.data.title }}<span ng-show="vm.order.attribute === 'value'"><span ng-show="vm.order.reverse"> &darr;</span><span ng-show="!vm.order.reverse"> &uarr;</span></span></div>
+		<div class="gf-dist-frequency" ng-click="vm.orderBy('frequency')">{{ 'questions.frequency' | translate }}<span ng-show="vm.order.attribute === 'frequency'"><span ng-show="vm.order.reverse"> &darr;</span><span ng-show="!vm.order.reverse"> &uarr;</span></span></div>
+	</div>
+	<div class="gf-dist-tree simple-tree">
+		<ol class="tree-root">
+			<li ng-repeat="item in vm.data.attributes | orderBy: vm.order.attribute : vm.order.reverse" ng-include="'views/directives/aggregation-types/grouped-frequency-distribution/grouped-frequency-distribution-nodes.html'"></li>
+		</ol>
+	</div>
+</div>

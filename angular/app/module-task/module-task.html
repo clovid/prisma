@@ -1,0 +1,5 @@
+<md-tabs md-selected="mtCtrl.selectedTab" flex>
+	<md-tab label="{{ tab.title }}" ui-sref=".{{ tab.name }}" ng-repeat="tab in mtCtrl.supportedTabs" layout-fill>
+		<md-content ui-view="{{ tab.name }}" id="tab--{{ tab.name }}" layout-fill ng-cloak></md-content>
+	</md-tab>
+</md-tabs>

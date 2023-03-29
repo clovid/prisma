@@ -1,0 +1,34 @@
+<md-toolbar class="md-medium-tall" flex="none" layout-align="center stretch">
+	<div class="md-toolbar-tools" layout="row" layout-align="space-between center">
+		<div layout="row" layout-margin layout-align="center center">
+			<md-button class="md-icon-button" ng-click="modCtrl.back()">
+				<md-icon>chevron_left</md-icon>
+			</md-button>
+			<md-icon>{{ modCtrl.module.icon }}</md-icon>
+			<div>{{ modCtrl.module.title }}</div>
+		</div>
+		<div ng-show="modCtrl.currentTask()"><strong>{{ modCtrl.currentTask().title }}</strong></div>
+		<div layout="row" layout-align="center center">
+			<div layout="row" layout-align="center center" layout-padding>
+				<div translate translate-values="{
+					datasets: modCtrl.currentTask() ? modCtrl.currentTask().numberOfDatasets : modCtrl.module.numberOfDatasets
+				}">
+					toolbar.numberOfDatasets
+				</div>
+				<div ld-filter-summary></div>
+			</div>
+			<div ld-navigation-menu></div>
+		</div>
+	</div>
+</md-toolbar>
+<md-progress-linear id="main-progress-bar" md-mode="indeterminate" ng-show="$loading > 0"></md-progress-linear>
+<md-content flex="auto" layout="column">
+	<div class="ld--module--tabs" flex="none" layout="row">
+		<div ui-sref="module.tasks({module: modCtrl.module.name})" ui-sref-active="active" class="ld--module--tabs-tab ld--module--tabs-overview" translate>module.title</div>
+		<div ng-repeat="task in modCtrl.openTasks" ng-click="modCtrl.switchTask(task)" ng-class="{active: $stateParams.id === task.id}" class="ld--module--tabs-tab ld--module--tabs-task">
+			{{ task.title }}
+			<md-button class="md-icon-button" ng-click="modCtrl.closeTask(task)"><md-icon>close</md-icon></md-button>
+		</div>
+	</div>
+	<ui-view flex layout="column"></ui-view>
+</md-content>

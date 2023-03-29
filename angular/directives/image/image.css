@@ -1,0 +1,78 @@
+.ld-image-wrapper {
+	background-color: #E6EE9C; /* lime 200 */
+    min-width: 100%;
+    min-height: 100%;
+    width: 600px; /* angular-pan-zoom needs hard px values */
+    height: 650px; /* angular-pan-zoom needs hard px values */
+}
+
+.ld-image-overlay {
+    position: absolute;
+    top: 0;
+    opacity: 0.4;
+}
+
+div.tooltip {
+    position: absolute;
+    text-align: center;
+    padding: 20px;
+    border: 1px solid #999;
+    border-radius: 8px;
+    background-color: #fff;
+    font-size: 4em;
+    pointer-events: none;
+}
+
+div.js-map {
+	position: absolute;
+	top: 0;
+}
+
+.ld-image-scrollbar {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 30px;
+    background: #cddc39;
+    display: flex;
+}
+
+.ld-image-scrollbar-overview {
+    position: absolute;
+    right: 0;
+    font-size: 10px;
+    background: #cddc39;
+    padding: 2px;
+    cursor: default;
+    color: #8e9827;
+}
+
+.ld-image-scrollbar-slice {
+    cursor: pointer;
+    flex: 1;
+    position: relative;
+}
+
+.ld-image-scrollbar-slice.active,
+.ld-image-scrollbar-slice.has-overlay.active {
+    background: #aab72f;
+}
+
+.ld-image-scrollbar-slice.has-overlay {
+    background: rgb(98, 206, 98);
+}
+
+.ld-image-scrollbar-slice.has-marks:before {
+    background: red;
+    border-radius: 6px;
+    border: 1px solid white;
+    content: '';
+    display: block;
+    height: 10px;
+    left: -5px;
+    opacity: 0.7;
+    position: absolute;
+    top: 10px;
+    width: 10px;
+}

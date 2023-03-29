@@ -1,0 +1,21 @@
+<div class="ld--directives--question-marker" md-whiteframe="1">
+	<div class="question-marker--head clickable" layout="row" layout-align="start center">
+		<md-button ng-click="vm.showAnswers()" ng-show="vm.data.showAnswers" class="md-icon-button" aria-label="Toggle Answers">
+			<md-tooltip><span translate>questions.hideAnswers</span></md-tooltip>
+			<md-icon>blur_on</md-icon>
+		</md-button>
+		<md-button ng-click="vm.showAnswers()" ng-hide="vm.data.showAnswers" class="md-icon-button" aria-label="Toggle Answers">
+			<md-tooltip><span translate>questions.showAnswers</span></md-tooltip>
+			<md-icon>blur_off</md-icon>
+		</md-button>
+		<md-button ng-if="vm.data.overlayId" ng-click="vm.showSolution()" ng-show="vm.data.showSolution" ng-disabled="!vm.data.showAnswers" class="md-icon-button" aria-label="Toggle Solution">
+			<md-tooltip><span translate>questions.hideSolution</span></md-tooltip>
+			<md-icon>visibility</md-icon>
+		</md-button>
+		<md-button ng-if="vm.data.overlayId" ng-click="vm.showSolution()" ng-hide="vm.data.showSolution" ng-disabled="!vm.data.showAnswers" class="md-icon-button" aria-label="Toggle Solution">
+			<md-tooltip><span translate>questions.highlightSolution</span></md-tooltip>
+			<md-icon>visibility_off</md-icon>
+		</md-button>
+		{{ ::vm.data.title }} (N = {{ ::vm.data.population }})
+	</div>
+</div>

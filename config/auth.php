@@ -14,8 +14,22 @@ return [
     */
 
     'defaults' => [
-        'guard' => 'web',
+        'guard' => env('AUTH_DEFAULTS_GUARD', 'local'),
         'passwords' => 'users',
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Authentication Chain
+    |--------------------------------------------------------------------------
+    |
+    | This array defines an authentication chain of guards that are used to
+    | authenticate a user.
+    |
+    */
+    'guard-chain' => [
+        'local',
+        'cads'
     ],
 
     /*
@@ -41,8 +55,18 @@ return [
             'provider' => 'users',
         ],
 
-        'api' => [
-            'driver' => 'token',
+        // 'api' => [
+        //     'driver' => 'token',
+        //     'provider' => 'api',
+        // ],
+
+        'cads' => [
+            'driver' => 'cads',
+            'provider' => 'cads',
+        ],
+
+        'local' => [
+            'driver' => 'local',
             'provider' => 'users',
         ],
     ],
@@ -70,38 +94,15 @@ return [
             'model' => App\User::class,
         ],
 
+        'cads' => [
+            'driver' => 'cads',
+            'model' => App\User::class,
+        ],
+
         // 'users' => [
         //     'driver' => 'database',
         //     'table' => 'users',
         // ],
-    ],
-
-    /*
-    |--------------------------------------------------------------------------
-    | Resetting Passwords
-    |--------------------------------------------------------------------------
-    |
-    | Here you may set the options for resetting passwords including the view
-    | that is your password reset e-mail. You may also set the name of the
-    | table that maintains all of the reset tokens for your application.
-    |
-    | You may specify multiple password reset configurations if you have more
-    | than one user table or model in the application and you want to have
-    | separate password reset settings based on the specific user types.
-    |
-    | The expire time is the number of minutes that the reset token should be
-    | considered valid. This security feature keeps tokens short-lived so
-    | they have less time to be guessed. You may change this as needed.
-    |
-    */
-
-    'passwords' => [
-        'users' => [
-            'provider' => 'users',
-            'email' => 'auth.emails.password',
-            'table' => 'password_resets',
-            'expire' => 60,
-        ],
     ],
 
 ];

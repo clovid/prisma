@@ -1,0 +1,19 @@
+<div layout="column" flex class="ld-filter-settings--filter">
+	<div>
+		<div class="md-title"><md-icon>face</md-icon> {{ 'home.filter.byStudents' | translate }}</div>
+		<div ld-accounts-tree></div>
+	</div>
+	<div>
+		<div class="md-title"><md-icon>access_time</md-icon> {{ 'home.filter.byTime' | translate }}</div>
+		<div>
+			<md-datepicker ng-model="vm.filter.date" md-placeholder="{{ 'home.filter.chooseDate' | translate }}"></md-datepicker>
+		</div>
+		<div layout-align="center center">
+			<div>{{ 'home.filter.time.between' | translate }} <ld-time-input value="vm.filter.timespan.from"></ld-time-input> {{ 'home.filter.time.and' | translate }} <ld-time-input value="vm.filter.timespan.to"></ld-time-input> {{ 'home.filter.time.oclock' | translate }}</div>
+		</div>
+	</div>
+</div>
+<div layout="column" flex="none" class="ld-filter-settings--action">
+	<md-button class="md-raised md-primary" ng-click="vm.setFilter()"><md-icon>search</md-icon> {{ 'home.filter.apply' | translate }}</md-button>
+	<md-button class="md-raised" ng-show="vm.filterIsSet" ng-click="vm.resetFilter()"><md-icon>delete</md-icon> {{ 'home.filter.reset' | translate }}</md-button>
+</div>

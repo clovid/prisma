@@ -1,0 +1,50 @@
+.module-tabs--default-with-image {
+    overflow: hidden;
+    height: 100%;
+}
+
+.module-tabs--default-with-image--images {
+    flex: 0 0 800px;
+}
+
+.module-tabs--default-with-image--images.resizable.no-transition > div[ld-image] {
+    pointer-events: none;
+}
+
+.module-tabs--default-with-image--questions {
+    margin-left: 28px;
+    overflow-y: scroll;
+    padding-right: 10px;
+}
+
+.module-tabs--default-with-image--questions h2 {
+    font-size: 1.2em;
+    margin-bottom: 0;
+}
+
+.module-tabs--default-with-image--questions > div {
+    margin: 8px 0;
+}
+
+.images-selector {
+    position: absolute;
+    top: 0;
+    width: 25px;
+    border-right: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
+}
+
+.images-selector > div {
+    background-color: #eee;
+	text-align: center;
+	cursor: pointer;
+	padding: 5px;
+}
+
+.images-selector > div:hover {
+	background-color: #e6ee9c;
+}
+
+.images-selector > div.active {
+	background-color: #cddc39
+}

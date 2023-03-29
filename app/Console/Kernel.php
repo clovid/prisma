@@ -13,7 +13,9 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        // Commands\Inspire::class,
+        Commands\MakeUser::class,
+        Commands\CacheImages::class,
+        Commands\ClearFiles::class,
     ];
 
     /**
@@ -24,7 +26,18 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('inspire')
-        //          ->hourly();
+        $schedule->command('clear:files -u "7 days ago"')
+                 ->everyMinute();
+    }
+
+    /**
+     * Register the Closure based commands for the application.
+     *
+     * @return void
+     */
+    protected function commands()
+    {
+        require base_path('routes/console.php');
+        $this->load(__DIR__ . '/Commands');
     }
 }

@@ -1,0 +1,22 @@
+<div class="ld--directives--question-open" md-whiteframe="1">
+	<div class="question-open--head clickable" layout="row" layout-align="start center" ng-click="vm.data.showContent = !vm.data.showContent">
+		<md-button class="md-icon-button" aria-label="Toggle">
+			<md-icon ng-show="vm.data.showContent">arrow_drop_up</md-icon>
+			<md-icon ng-hide="vm.data.showContent">arrow_drop_down</md-icon>
+		</md-button>
+		{{ ::vm.data.title }}
+	</div>
+	<div class="question-open--elements" ng-show="vm.data.showContent" layout="row" layout-wrap>
+		<div class="question-open--element" ng-repeat="element in vm.elements track by $index" ng-click="vm.onClick($event, $index)" layout-padding flex="nogrow" ng-class="{selected: vm.selectedElements[$index]}">
+			<div class="question-open--element-title small">
+				#{{ $index + 1 }}
+				<span class="clickable" ng-if="vm.data.linked_marker_question_id" ng-click="vm.onClick($event, $index, true, true)">
+					<md-icon>image_search</md-icon>
+					<md-tooltip><span translate>questions.zoomAnnotation</span></md-tooltip>
+				</span>
+			</div>
+			<div class="question-open--element-body" ng-if="!vm.compare || !vm.data.originalValue" ng-bind-html="::element | htmlLinebreaks"></div>
+			<div class="question-open--element-body" processing-diff left-obj="vm.data.originalValue" right-obj="element" ng-if="vm.compare && vm.data.originalValue"></div>
+		</div>
+	</div>
+</div>

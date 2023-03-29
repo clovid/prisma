@@ -1,0 +1,54 @@
+.md-table-toolbar-selected .md-toolbar-tools, .md-toolbar-tools-filter {
+	font-size: 16px;
+}
+
+#admin--ui-view .md-table-toolbar-selected {
+	min-height: 68px;
+}
+
+#admin--ui-view .md-table-toolbar, .cf--table-head {
+	border-bottom: 1px solid #009688;
+	margin: 0;
+}
+
+.cf--table-head {
+	overflow: hidden;
+}
+
+#admin--ui-view .md-cell {
+	word-wrap: break-word;
+}
+
+.cf--table-title {
+	background-color: #B2DFDB;
+}
+
+/* gt-sm */
+@media (min-width: 960px) {
+	.layout-gt-sm-row.md-table-toolbar {
+		max-height: 68px;
+	}
+
+	.layout-gt-sm-row .cf--table-title {
+		background-color: initial;
+	}
+
+	.layout-gt-sm-row .cf--table-filter {
+		max-width: 55%;
+	}
+}
+
+/* gt-md */
+@media (min-width: 1280px) {
+	.layout-gt-md-row.md-table-toolbar {
+		max-height: 68px;
+	}
+
+	.layout-gt-md-row .cf--table-title {
+		background-color: initial;
+	}
+
+	.layout-gt-sm-row .cf--table-filter, .cf--table-filter {
+		max-width: 70%;
+	}
+}

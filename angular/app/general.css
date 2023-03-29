@@ -1,0 +1,180 @@
+body {
+	position: fixed;
+	height: 100%;
+	width: 100%
+}
+
+#main-progress-bar {
+	position: absolute;
+	top: 0;
+	z-index: 100;
+}
+
+#content {
+	height: 100%;
+}
+
+img.img-responsive {
+	max-width: 100%;
+}
+
+.clickable {
+	cursor: pointer;
+}
+
+.disabled {
+	cursor: default;
+}
+
+.placeholder {
+	color: #a9a9a9;
+}
+
+.no-md-errors .md-errors-spacer {
+	min-height: 0px;
+}
+
+.no-margin {
+	margin: 0;
+}
+
+.small {
+	font-size: 0.8em;
+}
+
+.alert {
+	color: #D50000;
+}
+
+.text-center {
+	text-align: center;
+}
+
+.hidden {
+	visibility: hidden;
+}
+
+/*
+	fix for md-tabs
+ */
+md-tab-content > div {
+	height: 100%;
+}
+
+/**
+ * Simple table
+ */
+
+.ld--simple-table {
+    text-align: center;
+    margin: 0;
+    padding: 0;
+    border-spacing: 0;
+    width: 100%;
+}
+
+.ld--simple-table thead {
+    font-weight: bold;
+}
+
+.ld--simple-table > thead > tr > td {
+    height: 40px;
+}
+
+.ld--simple-table td {
+    border-bottom: 1px rgba(0, 0, 0, 0.12) solid;
+    padding: 5px 20px;
+    /* border-spacing: 0; */
+}
+
+.ld--simple-table td.table-action {
+	padding-right: 0px;
+}
+
+.ld--simple-table > tbody > tr:hover {
+    background-color: #eee;
+}
+
+.ld--simple-table > tbody > tr {
+    transition: background-color 0.2s;
+}
+
+.ld--simple-table tr.success {
+	background-color: #c5e1a5;
+}
+
+.ld--simple-table tr.success:hover {
+	background-color: #aed581;
+}
+
+.ld--simple-table tr.failure {
+	background-color: #ef9a9a;
+}
+
+.ld--simple-table tr.failure:hover {
+	background-color: #e57373;
+}
+
+/**
+ * Simple tree
+ */
+
+.simple-tree ol {
+	list-style-type: none;
+	margin: 0;
+}
+
+.simple-tree ol#tree-root {
+	margin: 10px 0;
+	padding: 0;
+}
+
+.simple-tree .tree-item {
+	cursor: pointer;
+	display: flex;
+	align-items: center;
+	align-content: center;
+}
+
+.simple-tree .tree-item-toggle {
+	flex-basis:20px;
+	flex-shrink: 0;
+	padding: 4px;
+	text-align: center;
+}
+
+.simple-tree .tree-item-wrapper {
+	flex-grow: 1;
+	padding: 2px;
+	display: flex;
+}
+
+.simple-tree .tree-item-title {
+	padding: 3px;
+}
+
+.simple-tree .tree-caret {
+	width: 0;
+	height: 0;
+	border-style: solid;
+	display: inline-block;
+	vertical-align: middle;
+}
+
+.simple-tree .tree-caret-right {
+	border-width:  5px 0 5px 5px;
+	border-color: transparent transparent transparent #333;
+}
+
+.simple-tree .tree-caret-down {
+	border-width: 5px 5px 0 5px;
+	border-color: #333 transparent transparent transparent;
+}
+
+/**
+ * angular-resizable
+ */
+
+.rg-right {
+	background-color: #eee;
+}

@@ -1,0 +1,38 @@
+.free-text--element {
+	margin-bottom: 10px;
+}
+
+.free-text--element:hover {
+	background-color: #efefef;
+}
+
+.free-text--element.selected {
+	background-color: #e6ee9c;
+}
+
+.free-text--element.selected .free-text--element-title {
+	border-bottom-color: #cddc39;
+}
+
+.free-text--element-title {
+	font-size: .8em;
+	border-bottom: 1px solid #ddd;
+}
+
+@media (min-width: 600px) {
+	.free-text--element {
+		width: 50%;
+	}
+}
+
+@media (min-width: 960px) {
+	.free-text--element {
+		width: 33%;
+	}
+}
+
+@media (min-width: 1920px) {
+	.free-text--element {
+		width: 25%;
+	}
+}

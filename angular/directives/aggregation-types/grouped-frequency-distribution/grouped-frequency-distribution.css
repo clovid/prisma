@@ -1,0 +1,63 @@
+.gf-dist-head {
+    display: flex;
+}
+
+.gf-dist-head > div {
+    padding: 10px 15px;
+    background: #ccc;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.gf-dist-title {
+    flex: 1 0 auto;
+}
+
+.gf-dist-frequency {
+	width: 100px
+}
+
+.gf-dist-tree ol {
+    padding-left: 20px;
+    /*padding-bottom: 5px;*/
+}
+
+.gf-dist-tree ol.tree-root {
+    padding: 0;
+}
+
+.gf-dist-tree ol > li {
+    border-top: 1px solid #ddd;
+}
+
+.gf-dist-tree .tree-item {
+    padding: 5px 5px;
+}
+
+.gf-dist-tree .tree-item:hover {
+    background-color: #eee;
+}
+
+.gf-dist-tree .tree-item.success {
+    background-color: #c5e1a5;
+}
+
+.gf-dist-tree .tree-item.success:hover {
+    background-color: #aed581;
+}
+
+.gf-dist-tree .tree-item.failure {
+    background-color: #ef9a9a;
+}
+
+.gf-dist-tree .tree-item.failure:hover {
+    background-color: #e57373;
+}
+
+.gf-dist-tree-value {
+    flex: 1 0 auto;
+}
+
+.gf-dist-tree-frequency {
+    width: 110px;
+}

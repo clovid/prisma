@@ -1,0 +1,41 @@
+<div class="question-basic--head clickable" layout="row" layout-align="start center" ng-click="showContent = !showContent">
+	<md-button class="md-icon-button" aria-label="Toggle">
+		<md-icon ng-show="!showContent">arrow_drop_down</md-icon>
+		<md-icon ng-show="showContent">arrow_drop_up</md-icon>
+	</md-button>
+	{{ ::vm.data.title }}
+</div>
+<div ng-show="showContent">
+	<table class="question-ranking--table ld--simple-table">
+		<thead>
+			<tr>
+				<td flex="none"></td>
+				<td flex="auto" class="question-ranking--table--cols" ng-class="{'col-hover': col.hover}" ng-repeat="col in vm.table.cols" ng-mouseenter="vm.toggleTableColumn($index, true)" ng-mouseleave="vm.toggleTableColumn($index, false)">
+					{{ ::col.title }}
+				</td>
+			</tr>
+		</thead>
+		<tbody>
+			<tr ng-repeat="row in vm.table.data">
+				<td class="question-ranking--table--rows">
+					{{ ::vm.table.rows[$index].title }}
+				</td>
+				<td class="question-ranking--table--cell" ng-repeat="col in row"  ng-class="{'success': highlightCell && col.isCorrect, 'col-hover': col.hover}" ng-mouseenter="vm.toggleTableColumn($index, true)" ng-mouseleave="vm.toggleTableColumn($index, false)">
+					{{ col.frequency ? col.frequency : '-' }}
+				</td>
+			</tr>
+		</tbody>
+	</table>
+	<md-button ng-click="highlightCell = !highlightCell" ng-show="highlightCell" class="md-icon-button" aria-label="Toggle">
+		<md-tooltip><span translate>questions.hideSolution</span></md-tooltip>
+		<md-icon>visibility</md-icon>
+	</md-button>
+	<md-button ng-click="highlightCell = !highlightCell" ng-show="!highlightCell" class="md-icon-button" aria-label="Toggle">
+		<md-tooltip><span translate>questions.highlightSolution</span></md-tooltip>
+		<md-icon>visibility_off</md-icon>
+	</md-button>
+	<md-button ng-click="vm.transposeTable()" class="md-icon-button" aria-label="Transpose">
+		<md-tooltip><span translate>questions.transposeTable</span></md-tooltip>
+		<md-icon>shuffle</md-icon>
+	</md-button>
+</div>

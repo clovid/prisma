@@ -1,0 +1,52 @@
+.question-open--head {
+	background-color: #ccc;
+	font-weight: 700;
+	padding-right: 20px;
+	min-height: 45px;
+}
+
+.question-open--element {
+	/*margin-bottom: 10px;*/
+	width: 50%;
+}
+
+.question-open--element:hover {
+	background-color: #efefef;
+}
+
+.question-open--element.selected {
+	background-color: #e6ee9c;
+}
+
+.question-open--element.selected .question-open--element-title {
+	border-bottom-color: #cddc39;
+}
+
+.question-open--element-title {
+	font-size: .8em;
+	border-bottom: 1px solid #ddd;
+	display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.question-open--element ins,
+.question-open--element .ins {
+	color: black;
+	background: #bbffbb;
+}
+
+.question-open--element del,
+.question-open--element .del {
+	color: black;
+	background: #ffbbbb;
+}
+
+.question-open--element .noselect {
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}

@@ -1,0 +1,84 @@
+version: "3"
+services:
+  web:
+    image: docker.uni-muenster.de/prisma-web
+    build:
+      context: ../
+      dockerfile: docker_config/web.dockerfile
+    restart: unless-stopped
+    depends_on:
+      - app
+    ports:
+      - "8002:80"
+    volumes:
+      - webroot_data:/var/www/prisma/public:ro
+    environment:
+      SERVER_NAME: $PRISMA_SERVER
+
+  app:
+    image: docker.uni-muenster.de/prisma-app
+    build:
+      context: ../
+      dockerfile: docker_config/app.dockerfile
+    restart: unless-stopped
+    depends_on:
+      - db
+      - cache
+    volumes:
+      - webroot_data:/shared/app-webroot
+    environment:
+      APP_ENV: production
+      APP_DEBUG: "false"
+      APP_LOCALE: de
+      APP_KEY: $APP_KEY
+      APP_URL: https://${PRISMA_SERVER}
+      APP_LOG_LEVEL: info
+      AUTH_DEFAULTS_GUARD: $AUTH_DEFAULTS_GUARD
+      DB_CONNECTION: pgsql
+      DB_HOST: db
+      DB_DATABASE: $COMPOSE_PROJECT_NAME
+      DB_USERNAME: $PRISMA_USER
+      DB_PASSWORD: $PRISMA_PASSWORD
+      CACHE_DRIVER: memcached
+      CACHE_PREFIX: $COMPOSE_PROJECT_NAME
+      MEMCACHED_HOST: cache
+      SESSION_DRIVER: file
+      QUEUE_CONNECTION: sync
+      PROXY_SCHEMA: https
+      LOG_CHANNEL: stack
+      PRIVACY_MINIMUM: 6
+      LOG_SLACK_WEBHOOK_URL: $LOG_SLACK_WEBHOOK_URL
+      AKZENTO_API_URL: $AKZENTO_API_URL
+      MEDFORGE_API_URL: $MEDFORGE_API_URL
+      MEDFORGE_OAUTH_TOKEN_URL: $MEDFORGE_OAUTH_TOKEN_URL
+      MEDFORGE_OAUTH_CLIENT_ID: $MEDFORGE_OAUTH_CLIENT_ID
+      MEDFORGE_OAUTH_CLIENT_SECRET: $MEDFORGE_OAUTH_CLIENT_SECRET
+      VQUEST_API_URL: $VQUEST_API_URL
+      VQUEST_API_TOKEN: $VQUEST_API_TOKEN
+      VQUEST_ONLINE_API_URL: $VQUEST_ONLINE_API_URL
+      VQUEST_ONLINE_API_TOKEN: $VQUEST_ONLINE_API_TOKEN
+      CAMPUS_API_URL: $CAMPUS_API_URL
+      CAMPUS_API_TOKEN: $CAMPUS_API_TOKEN
+      OMERO_API_URL: $OMERO_API_URL
+      OMERO_API_USERNAME: $OMERO_API_USERNAME
+      OMERO_API_PASSWORD: $OMERO_API_PASSWORD
+
+  db:
+    image: postgres:9.5
+    restart: unless-stopped
+    hostname: db
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: $COMPOSE_PROJECT_NAME
+      POSTGRES_USER: $PRISMA_USER
+      POSTGRES_PASSWORD: $PRISMA_PASSWORD
+
+  cache:
+    image: memcached:1
+    restart: unless-stopped
+    hostname: cache
+
+volumes:
+  db_data:
+  webroot_data:

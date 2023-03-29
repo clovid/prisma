@@ -1,0 +1,21 @@
+<!-- VQuest -->
+<div layout="row" style="overflow: hidden;" class="module-tabs--default-with-image">
+	<div resizable r-directions="['right']" r-flex="true" ng-show="vm.data.images.length > 0" class="module-tabs--default-with-image--images">
+		<div ld-image image="image" ng-repeat="image in vm.data.images" ng-show="image.active" layout-fill></div>
+		<div class="images-selector" ng-if="vm.data.images.length > 1">
+			<div ng-click="vm.activateImage(image.id)" ng-repeat="image in vm.data.images" ng-class="{active: image.active}">{{ $index + 1 }}</div>
+		</div>
+	</div>
+	<div layout="column" class="module-tabs--default-with-image--questions" layout-fill layout-align="stretch start">
+		<div ng-repeat="question in vm.data.questions">
+			<h2 ng-if="question.type === 'heading'">{{ question.title }}</h2>
+			<p style="font-size: 1.2rem; margin: 0" ng-if="question.type === 'text'">{{ question.title }}</p>
+			<div md-whiteframe="1" ng-if="['heading', 'text'].indexOf(question.type) < 0">
+				<div ld-question-collection collection="question" ng-if="question.type === 'group'" class="ld-question-collection"></div>
+				<div ld-question-open data="question" ng-if="question.type === 'open'"></div>
+				<div ld-question-basic data="question" ng-if="question.type === 'basic'"></div>
+				<div ld-question-marker data="question" ng-if="question.type === 'marker'"></div>
+			</div>
+		</div>
+	</div>
+</div>

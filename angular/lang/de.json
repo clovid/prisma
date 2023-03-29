@@ -1,0 +1,131 @@
+{
+  "toolbar": {
+    "numberOfDatasets": "{{ datasets }} Datensätze für",
+    "filter": {
+      "noUserFilter": "kein Studierenden-Filter gesetzt",
+      "noTimeFilter": "kein Zeit-Filter gesetzt",
+      "moreDatasets": "+{{ datasets }} weitere",
+      "timeTill": "bis"
+    },
+    "menu": {
+      "loggedInAs": "Angemeldet als",
+      "userManagement": "Benutzerverwaltung",
+      "language": "Sprache",
+      "logout": "Abmelden"
+    }
+  },
+  "yes": "Ja",
+  "no": "Nein",
+  "abort": "Abbrechen",
+  "apply": "Übernehmen",
+  "login": {
+    "username": "Benutzerkennung",
+    "usernameRequired": "Geben Sie Ihre Benutzerkennung ein",
+    "password": "Passwort",
+    "passwordRequired": "Geben Sie Ihr Kennwort ein",
+    "buttonTitle": "In PRISMA anmelden",
+    "button": "Anmelden"
+  },
+  "home": {
+    "filter": {
+      "title": "Filter",
+      "store": "Aktuellen Filter speichern",
+      "restore": "Gespeicherten Filter wiederherstellen",
+      "byStudents": "Nach Studierenden",
+      "byTime": "Nach Zeit",
+      "time": {
+        "between": "Zwischen",
+        "and": "und",
+        "oclock": "Uhr"
+      },
+      "apply": "Filter übernehmen",
+      "reset": "Filter löschen",
+      "chooseDate": "Datum wählen"
+    },
+    "title": "Ergebnis",
+    "modules": "Modul",
+    "datasets": "Datensätze",
+    "show": "Anzeigen"
+  },
+  "module": {
+    "title": "Übersicht"
+  },
+  "moduleTasks": {
+    "title": "Fall-Auswahl",
+    "task": "Fall",
+    "datasets": "Datensätze",
+    "show": "Anzeigen"
+  },
+  "moduleTabs": {
+    "therapy": {
+      "drugs": "Medikamente",
+      "narcoticDrugs": "BtM-Medikamente",
+      "incapacityCertificate": "Arbeitsunfähigkeitsbescheinigung",
+      "referralTo": "Mit-\\ Weiterbehandlung",
+      "emergency": "Krankenhausbehandlung"
+    }
+  },
+  "adminUsers": {
+    "title": "Benutzer-Accounts",
+    "filterResult": "({{ total }} gesamt, {{ filtered }} gefiltert)",
+    "addUser": "Neuen Benutzer erstellen",
+    "filter": "Filter:",
+    "name": "Name",
+    "permissions": "Rechte",
+    "selectedUsers": "{{ subset }} von {{ total }} Benutzer-Accounts ausgewählt",
+    "clearSelection": "Auswahl aufheben",
+    "changeModulePermission": "Modulzugriff ändern",
+    "deleteUser": "Benutzer löschen",
+    "table": {
+      "login": "Login",
+      "firstname": "Vorname",
+      "lastname": "Nachname",
+      "isActivated": "Aktiviert?",
+      "isAdmin": "Admin?",
+      "modules": "Module",
+      "actions": "Aktionen",
+      "page": "Seite",
+      "rowsPerPage": "Einträge pro Seite",
+      "of": "von"
+    },
+    "moduleDialog": {
+      "title": "Aktivierte Module auswählen"
+    },
+    "userDialog": {
+      "title": "Benutzer erstellen",
+      "notice": "Bitte nur in Ausnahmefällen neue Benutzer erstellen. In der Regel sollten sich alle Personen über die persönliche @uni-muenster.de-Kennung anmelden.",
+      "fields": {
+        "loginRequired": "Bitte einen Login-Namen vergeben",
+        "firstnameRequired": "Bitte einen Vornamen eingeben",
+        "lastnameRequired": "Bitte den Nachnamen eingeben",
+        "password": "Passwort",
+        "passwordRequired": "Bitte ein Passwort festlegen",
+        "passwordMinLength": "Bitte mindestens 5 Zeichen eingeben"
+      },
+      "modulePermissions": "Modulzugriff für den Benutzer",
+      "generatePassword": "Neues Passwort generieren",
+      "apply": "Benutzer erstellen"
+    }
+  },
+  "questions": {
+    "highlightSolution": "Lösung einblenden",
+    "hideSolution": "Lösung ausblenden",
+    "frequency": "Häufigkeit",
+    "showAnswers": "Antworten einblenden",
+    "hideAnswers": "Antworten ausblenden",
+    "transposeTable": "Tabelle transponieren",
+    "showRegion": "Bereich ausblenden",
+    "hideRegion": "Bereich einblenden",
+    "zoomAnnotation": "Zur zugehörigen Markierung springen"
+  },
+  "errors": {
+    "externalServer": "Es besteht ein Problem mit dem externen Server.",
+    "unauthorized": "Anmeldung erforderlich!",
+    "forbidden": "Die notwendigen Berechtigungen für diese Aktion fehlen!",
+    "notFound": "Es ist ein Fehler aufgetreten: die URL {{ url }} ist nicht erreichbar!",
+    "methodNotAllowed": "Es ist ein Fehler aufgetreten: diese Aktion ist nicht möglich!",
+    "filterToLarge": "Der Studierenden-Filter ist zu groß, bitte wählen Sie weniger Studierende aus.",
+    "unprocessableEntity": "Es ist ein Fehler aufgetreten: bitte überprüfen Sie Ihre Eingaben!",
+    "tooManyRequests": "Es wurden zu viele Anfragen geschickt. Bitte warten Sie eine Minute."
+  }
+}

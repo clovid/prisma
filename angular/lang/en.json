@@ -1,0 +1,131 @@
+{
+  "toolbar": {
+    "numberOfDatasets": "{{ datasets }} datasets for",
+    "filter": {
+      "noUserFilter": "no student filter set",
+      "noTimeFilter": "no time filter set",
+      "moreDatasets": "+{{ datasets }} more",
+      "timeTill": "to"
+    },
+    "menu": {
+      "loggedInAs": "Logged in as",
+      "userManagement": "User management",
+      "language": "Language",
+      "logout": "Log out"
+    }
+  },
+  "yes": "Yes",
+  "no": "No",
+  "abort": "Cancel",
+  "apply": "Apply",
+  "login": {
+    "username": "User ID",
+    "usernameRequired": "Enter your user ID",
+    "password": "Password",
+    "passwordRequired": "Enter your password",
+    "buttonTitle": "Log in to PRISMA",
+    "button": "Log in"
+  },
+  "home": {
+    "filter": {
+      "title": "Filter",
+      "store": "Save current filter",
+      "restore": "Restore saved filter",
+      "byStudents": "By students",
+      "byTime": "By time",
+      "time": {
+        "between": "Between",
+        "and": "and",
+        "oclock": "o'clock"
+      },
+      "apply": "Apply filter",
+      "reset": "Delete filter",
+      "chooseDate": "Choose date"
+    },
+    "title": "Result",
+    "modules": "Module",
+    "datasets": "Datasets",
+    "show": "Show"
+  },
+  "module": {
+    "title": "Overview"
+  },
+  "moduleTasks": {
+    "title": "Case selection",
+    "task": "Case",
+    "datasets": "Datasets",
+    "show": "Show"
+  },
+  "moduleTabs": {
+    "therapy": {
+      "drugs": "Medication",
+      "narcoticDrugs": "Narcotic drugs",
+      "incapacityCertificate": "Certificate of incapacity for work",
+      "referralTo": "Referral to",
+      "emergency": "Hospital treatment"
+    }
+  },
+  "adminUsers": {
+    "title": "User accounts",
+    "filterResult": "({{ total }} total, {{ filtered }} filtered)",
+    "addUser": "Create new user",
+    "filter": "Filter:",
+    "name": "Name",
+    "permissions": "Right",
+    "selectedUsers": "{{ subset }} of {{ total }} User accounts selected",
+    "clearSelection": "Cancel selection",
+    "changeModulePermission": "Change module access",
+    "deleteUser": "Delete user",
+    "table": {
+      "login": "Login",
+      "firstname": "First name",
+      "lastname": "Last name",
+      "isActivated": "Activated?",
+      "isAdmin": "Admin?",
+      "modules": "Modules",
+      "actions": "Actions",
+      "page": "Page",
+      "rowsPerPage": "Rows per page",
+      "of": "of"
+    },
+    "moduleDialog": {
+      "title": "Select activated modules"
+    },
+    "userDialog": {
+      "title": "Create user",
+      "notice": "Please create new users only in exceptional cases. As a rule, all persons should log in using the personal @uni-muenster.de identifier.",
+      "fields": {
+        "loginRequired": "Please assign a login name",
+        "firstnameRequired": "Please enter a first name",
+        "lastnameRequired": "Please enter the last name",
+        "password": "Password",
+        "passwordRequired": "Please set a password",
+        "passwordMinLength": "Please enter at least 5 characters"
+      },
+      "modulePermissions": "Module access for the user",
+      "generatePassword": "Generate new password",
+      "apply": "Create user"
+    }
+  },
+  "questions": {
+    "highlightSolution": "Show solution",
+    "hideSolution": "Hide solution",
+    "frequency": "Frequency",
+    "showAnswers": "Show answers",
+    "hideAnswers": "Hide answers",
+    "transposeTable": "Transpose table",
+    "showRegion": "Hide area",
+    "hideRegion": "Show area",
+    "zoomAnnotation": "Zoom to connected annotation"
+  },
+  "errors": {
+    "externalServer": "There is a problem with the external server.",
+    "unauthorized": "Registration required!",
+    "forbidden": "The necessary permissions for this action are missing!",
+    "notFound": "An error has occurred: the URL {{ url }} is not reachable!",
+    "methodNotAllowed": "An error has occurred: this action is not possible!",
+    "filterToLarge": "The student filter is too large, please select fewer students.",
+    "unprocessableEntity": "An error has occurred: please check your entries!",
+    "tooManyRequests": "Too many requests have been sent. Please wait a minute."
+  }
+}

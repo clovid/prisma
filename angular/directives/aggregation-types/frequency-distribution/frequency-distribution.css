@@ -1,0 +1,13 @@
+.frequency-distribution-table {
+    text-align: left;
+}
+.frequency-distribution-table > thead > tr > td {
+    height: 0;
+    padding: 10px 15px;
+    cursor: pointer;
+    background-color: #ccc
+}
+
+.frequency-distribution-table td.frequency-distribution-frequency {
+	width: 150px
+}

@@ -1,0 +1,18 @@
+.ld--directives--frequency {
+    display: flex;
+}
+
+.ld--directives--frequency > div {
+    display: flex;
+    align-items: center;
+    padding: 10px 15px;
+}
+
+.ld--directives--frequency .frequency-title {
+    background: #ccc;
+    font-weight: bold;
+}
+
+.ld--directives--frequency .frequency-frequency {
+    background: #eee;
+}

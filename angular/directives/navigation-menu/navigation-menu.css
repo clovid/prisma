@@ -1,0 +1,14 @@
+.lang-selector {
+  align-items: center;
+}
+
+.lang-selector > md-icon {
+  flex: 0;
+  margin-right: 5px;
+}
+
+.lang-selector .lang-selector-item {
+  width: auto;
+  padding: 5px;
+  min-width: 0;
+}

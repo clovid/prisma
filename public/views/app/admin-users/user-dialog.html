@@ -1,0 +1,67 @@
+<md-dialog aria-label="User Dialog" flex="90" flex-gt-sm="70" flex-gt-md="45">
+	<form novalidate name="createUserForm" ng-submit="createUserForm.$valid && vm.submit()">
+		<md-toolbar>
+			<div class="md-toolbar-tools">
+				<h2 translate>adminUsers.userDialog.title</h2>
+				<span flex></span>
+				<md-button class="md-icon-button" ng-click="vm.cancel($event)">
+					<md-icon>close</md-icon>
+				</md-button>
+			</div>
+		</md-toolbar>
+		<md-dialog-content>
+			<div class="md-dialog-content">
+				<div translate>adminUsers.userDialog.notice</div>
+				<div layout="column" layout-gt-xs="row">
+					<!-- login required -->
+					<md-input-container flex>
+						<label translate>adminUsers.table.login</label>
+						<input name="login" ng-model="vm.user.login" required>
+						<div ng-messages="createUserForm.login.$error">
+							<div ng-message="required" translate>adminUsers.userDialog.fields.loginRequired</div>
+						</div>
+					</md-input-container>
+					<!-- firstname -->
+					<md-input-container flex>
+						<label translate>adminUsers.table.firstname</label>
+						<input name="firstname" ng-model="vm.user.firstname" required>
+						<div ng-messages="createUserForm.firstname.$error">
+							<div ng-message="required" translate>adminUsers.userDialog.fields.firstnameRequired</div>
+						</div>
+					</md-input-container>
+					<!-- lastname -->
+					<md-input-container flex>
+						<label translate>adminUsers.table.lastname</label>
+						<input name="lastname" ng-model="vm.user.lastname" required>
+						<div ng-messages="createUserForm.lastname.$error">
+							<div ng-message="required" translate>adminUsers.userDialog.fields.lastnameRequired</div>
+						</div>
+					</md-input-container>
+				</div>
+				<!-- password -->
+				<div layout="row" layout-align="start center">
+					<!-- password required -->
+					<md-input-container>
+						<label translate>adminUsers.userDialog.fields.password</label>
+						<input name="password" ng-model="vm.user.password" required minlength="5">
+						<div ng-messages="createUserForm.password.$error">
+							<div ng-message="required" translate>adminUsers.userDialog.fields.passwordRequired</div>
+							<div ng-message="minlength" translate>adminUsers.userDialog.fields.passwordMinLength</div>
+						</div>
+					</md-input-container>
+					<md-button ng-click="vm.refreshPassword()" class="md-icon-button">
+						<md-icon>refresh</md-icon>
+						<md-tooltip><span translate>adminUsers.userDialog.generatePassword</span></md-tooltip>
+					</md-button>
+				</div>
+				<!-- modules -->
+				<div class="md-title" translate>adminUsers.userDialog.modulePermissions</div>
+				<cf-simple-tree items="vm.modules" selected-items="vm.selectedModules" title-property="title"></cf-simple-tree>
+			</div>
+		</md-dialog-content>
+		<md-dialog-actions layout="row" layout-align="end center">
+			<md-button ng-click="vm.cancel($event)"><md-icon>close</md-icon> {{ 'abort' | translate }}</md-button>
+			<md-button class="md-primary md-raised" type="submit"><md-icon>save</md-icon> {{ 'adminUsers.userDialog.apply' | translate }}</md-button>
+		</md-dialog-actions>
+	</form>
+</md-dialog>

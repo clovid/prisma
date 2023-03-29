@@ -1,0 +1,14 @@
+<table class="frequency-distribution-table ld--simple-table">
+	<thead>
+		<tr>
+			<td flex="auto" class="frequency-distribution-title" ng-click="vm.orderBy('value')">{{ ::vm.data.title }}<span ng-show="vm.order.attribute === 'value'"><span ng-show="vm.order.reverse"> &darr;</span><span ng-show="!vm.order.reverse"> &uarr;</span></span></td>
+			<td flex="none" class="frequency-distribution-frequency" ng-click="vm.orderBy('frequency')">{{ 'questions.frequency' | translate }}<span ng-show="vm.order.attribute === 'frequency'"><span ng-show="vm.order.reverse"> &darr;</span><span ng-show="!vm.order.reverse"> &uarr;</span></span></td>
+		</tr>
+	</thead>
+	<tbody>
+		<tr ng-repeat="attribute in vm.data.attributes | orderBy: vm.order.attribute : vm.order.reverse">
+			<td class="frequency-distribution-title"><span ng-bind-html="::attribute.value"></span></td>
+			<td class="frequency-distribution-frequency">{{ ::attribute.frequency }}</td>
+		</tr>
+	</tbody>
+</table>

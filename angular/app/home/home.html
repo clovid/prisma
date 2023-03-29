@@ -1,0 +1,63 @@
+<md-toolbar>
+	<div class="md-toolbar-tools">
+		<span>PRISMA</span>
+		<span flex></span>
+		<div ld-navigation-menu></div>
+	</div>
+</md-toolbar>
+<md-progress-linear id="main-progress-bar" md-mode="indeterminate" ng-show="$loading > 0"></md-progress-linear>
+<md-content id="ld--home" flex layout="row">
+	<div id="ld--home--filter" layout-padding layout="column">
+		<div layout="row" layout-align="space-between center">
+			<div class="md-display-1" translate>home.filter.title</div>
+			<div layout="row">
+				<md-icon ng-click="homeCtrl.storeFilterToUserConfig()" class="hidden clickable">
+					save
+					<md-tooltip><span translate>home.filter.store</span></md-tooltip>
+				</md-icon>
+				<md-icon ng-click="homeCtrl.setFilterFromUserConfig()" class="clickable" ng-show="homeCtrl.userConfig.filter">
+					<md-tooltip><span translate>home.filter.restore</span></md-tooltip>
+					settings_backup_restore
+				</md-icon>
+			</div>
+		</div>
+		<md-content ld-filter-settings flex layout="column"></md-content>
+	</div>
+	<div flex id="ld--home--result" layout-padding>
+		<div class="md-display-1" translate>home.title</div>
+		<div flex ld-filter-summary layout-padding md-whiteframe="1"></div>
+		<div>
+			<table class="ld--simple-table">
+				<thead>
+					<tr>
+						<td translate>home.modules</td>
+						<td translate>home.datasets</td>
+						<td></td>
+					</tr>
+				</thead>
+				<tbody>
+					<tr ng-repeat="module in homeCtrl.modules">
+						<td><md-icon>{{ module.icon }}</md-icon> {{ module.title }}</td>
+						<td>
+							<span ng-hide="module.isLoaded || module.isCancelled" layout="column" layout-align="center center">
+								<md-progress-circular md-mode="indeterminate" md-diameter="30"></md-progress-circular>
+							</span>
+							<span ng-show="module.isLoaded">
+								{{ module.numberOfDatasets | number }}
+							</span>
+							<span ng-show="module.isCancelled">
+								--
+							</span>
+						</td>
+						<td>
+							<md-button ng-disabled="!module.numberOfDatasets" class="md-raised" ui-sref="module.tasks({module: module.name})">
+								{{ 'home.show' | translate }} <md-icon>exit_to_app</md-icon>
+							</md-button>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+
+</md-content>

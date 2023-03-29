@@ -1,0 +1,23 @@
+.ld--module--tabs {
+	background-color: #eee;
+	min-height: 40px;
+}
+
+.ld--module--tabs-tab {
+	display: flex;
+	align-items: center;
+	cursor: pointer;
+}
+
+.ld--module--tabs-overview {
+	padding: 0 20px;
+}
+
+.ld--module--tabs-task {
+	padding-left: 20px;
+}
+
+.ld--module--tabs-tab.active {
+	background-color: #ddd;
+	cursor: default;
+}

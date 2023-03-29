@@ -1,0 +1,11 @@
+<div layout="column" layout-gt-xs="row" layout-align="start start" layout-margin>
+	<div ld-frequency-distribution ng-if="mtCtrl.task.data.laboratory.inHouseDiagnostics" data="mtCtrl.task.data.laboratory.inHouseDiagnostics" md-whiteframe="1"></div>
+	<div ld-frequency ng-if="mtCtrl.task.data.laboratory.urgent" data="mtCtrl.task.data.laboratory.urgent" md-whiteframe="1"></div>
+</div>
+<div layout="column" layout-gt-md="row" layout-align="space-between start" layout-margin>
+	<div ld-frequency-distribution ng-if="mtCtrl.task.data.laboratory.edta" data="mtCtrl.task.data.laboratory.edta" md-whiteframe="1" flex-gt-md="40"></div>
+	<div ld-frequency-distribution ng-if="mtCtrl.task.data.laboratory.citrat" data="mtCtrl.task.data.laboratory.citrat" md-whiteframe="1" flex-gt-md="40"></div>
+	<div ld-frequency-distribution ng-if="mtCtrl.task.data.laboratory.wholeBlood" data="mtCtrl.task.data.laboratory.wholeBlood" md-whiteframe="1" flex-gt-md="40"></div>
+	<div ld-frequency-distribution ng-if="mtCtrl.task.data.laboratory.glucose" data="mtCtrl.task.data.laboratory.glucose" md-whiteframe="1" flex-gt-md="40"></div>
+	<div ld-frequency-distribution ng-if="mtCtrl.task.data.laboratory.urine" data="mtCtrl.task.data.laboratory.urine" md-whiteframe="1" flex-gt-md="40"></div>
+</div>

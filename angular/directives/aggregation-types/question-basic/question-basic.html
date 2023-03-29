@@ -1,0 +1,37 @@
+<div class="question-basic--head clickable" layout="row" layout-align="start center" ng-click="vm.data.showContent = true" ng-hide="vm.data.showContent">
+	<md-button class="md-icon-button" aria-label="Toggle">
+		<md-icon>arrow_drop_down</md-icon>
+	</md-button>
+	{{ ::vm.data.title }}
+</div>
+<div ng-show="vm.data.showContent">
+	<table class="question-basic-table frequency-distribution-table ld--simple-table">
+		<thead>
+			<tr>
+				<td flex="none" class="table-action" ng-click="vm.data.showContent = false">
+					<md-icon>arrow_drop_up</md-icon>
+				</td>
+				<td flex="auto" class="question-basic-title" ng-click="vm.orderBy('value')">
+					{{ ::vm.data.title }}<span ng-show="vm.order.attribute === 'value'"><span ng-show="vm.order.reverse"> &darr;</span><span ng-show="!vm.order.reverse"> &uarr;</span></span>
+				</td>
+				<td flex="none" class="question-basic-frequency" ng-click="vm.orderBy('frequency')">
+					{{ 'questions.frequency' | translate }}<span ng-show="vm.order.attribute === 'frequency'"><span ng-show="vm.order.reverse"> &darr;</span><span ng-show="!vm.order.reverse"> &uarr;</span></span>
+				</td>
+			</tr>
+		</thead>
+		<tbody>
+			<tr ng-repeat="attribute in vm.data.attributes | orderBy: vm.order.attribute : vm.order.reverse " ng-class="{'success': highlightRows && attribute.isCorrect, 'additional': attribute.is_additional}">
+				<td colspan="2" class="question-basic-title">{{ ::attribute.value }}</td>
+				<td class="question-basic-frequency">{{ ::attribute.frequency }}</td>
+			</tr>
+		</tbody>
+	</table>
+	<md-button ng-click="highlightRows = !highlightRows" ng-show="highlightRows" class="md-icon-button" aria-label="Toggle">
+		<md-tooltip><span translate>questions.hideSolution</span></md-tooltip>
+		<md-icon>visibility</md-icon>
+	</md-button>
+	<md-button ng-click="highlightRows = !highlightRows" ng-show="!highlightRows" class="md-icon-button" aria-label="Toggle">
+		<md-tooltip><span translate>questions.highlightSolution</span></md-tooltip>
+		<md-icon>visibility_off</md-icon>
+	</md-button>
+</div>

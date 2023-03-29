@@ -1,0 +1,6 @@
+<div class="ld--directives--free-text" layout="row" layout-wrap>
+	<div class="free-text--element" md-whiteframe="1" ng-repeat="element in data.values track by $index" ng-click="selectedElements[$index] = !selectedElements[$index]" layout-padding flex="nogrow" ng-class="{selected: selectedElements[$index]}">
+		<div class="free-text--element-title small">#{{ $index + 1 }}</div>
+		<div class="free-text--element-body" ng-bind-html="::element | htmlLinebreaks"></div>
+	</div>
+</div>

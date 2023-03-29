@@ -1,0 +1,25 @@
+.git
+.gitattributes
+.gitignore
+.env
+.env.example
+vendor
+
+# Storage
+bootstrap/cache/**
+storage/app/**
+storage/framework/cache/**
+storage/framework/sessions/**
+storage/framework/views/**
+storage/logs/**
+
+# External frameworks
+bower.json
+bower_components
+node_modules
+.dockerignore
+
+# Tests
+phpspec.yml
+phpunit.xml
+tests

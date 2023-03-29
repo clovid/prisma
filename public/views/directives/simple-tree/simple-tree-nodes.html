@@ -1,0 +1,16 @@
+<div class="tree-item">
+	<div class="tree-item-toggle" ng-click="vm.toggleOpen(item)" ng-if="item[vm.childrenNode].length > 0">
+		<span class="tree-caret" ng-class="{'tree-caret-right': !item.open, 'tree-caret-down': item.open}" aria-hidden="true"></span>
+	</div>
+	<div class="tree-item-wrapper" ng-click="!item[vm.disabledProperty] && vm.toggleSelection(item)" ng-class="{'selected': item.selected, 'disabled': item[vm.disabledProperty]}">
+		<span ng-if="!item[vm.childrenNode] || item[vm.childrenNode].length === 0">
+			<md-icon ng-if="item.selected">check_box</md-icon>
+			<md-icon ng-if="!item.selected">check_box_outline_blank</md-icon>
+		</span> 
+		<span class="tree-item-title">{{ ::item[vm.titleProperty] }}</span>
+	</div>
+</div>
+<ol ng-if="item.open">
+	<li ng-repeat="item in item[vm.childrenNode]" ng-include="'views/directives/simple-tree/simple-tree-nodes.html'">
+	</li>
+</ol>

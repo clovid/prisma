@@ -1,12 +1,54 @@
 {
   "private": true,
   "scripts": {
-    "prod": "gulp --production",
-    "dev": "gulp watch"
+    "start": "gulp && gulp watch",
+    "start:server-1": "php artisan serve",
+    "start:server-2": "php artisan serve --port=8001",
+    "start:medforge": "cd ../medforge && php artisan serve --port=8002",
+    "build": "gulp",
+    "prod": "gulp production",
+    "vendor": "gulp vendor",
+    "start:server": "concurrently --kill-others \"npm run start:server-1\" \"npm run start:server-2\" \"npm run start:medforge\""
+  },
+  "dependencies": {
+    "angular": "1.6.x",
+    "angular-animate": "1.6.x",
+    "angular-aria": "1.6.x",
+    "angular-diff-match-patch": "github:amweiss/angular-diff-match-patch",
+    "angular-i18n": "1.6.x",
+    "angular-material": "~1.1",
+    "angular-material-data-table": "^0.10.9",
+    "angular-messages": "1.6.x",
+    "angular-mousewheel": "^1.0.5",
+    "angular-pan-zoom": "^1.0.18",
+    "angular-resizable": "^1.2.0",
+    "angular-sanitize": "1.6.x",
+    "angular-translate": "^2.19.0",
+    "angular-translate-loader-static-files": "^2.19.0",
+    "angular-translate-storage-local": "^2.19.0",
+    "angular-ui-router": "0.4.x",
+    "angular-underscore": "0.0.3",
+    "diff-match-patch": "^1.0.0",
+    "hamsterjs": "^1.1.2",
+    "jquery": "^2.2.4",
+    "moment": "^2.20.1",
+    "ngdropover": "^1.1.0",
+    "ngstorage": "^0.3.11",
+    "satellizer": "^0.14.1",
+    "underscore": "^1.x"
   },
   "devDependencies": {
-    "gulp": "^3.9.1",
-    "laravel-elixir": "^5.0.0",
-    "bootstrap-sass": "^3.3.0"
+    "concurrently": "^7.0.0",
+    "cssnano": "^4.1.10",
+    "del": "^5.0.0",
+    "gulp": "^4.0.0",
+    "gulp-angular-filesort": "^1.2.1",
+    "gulp-concat": "^2.6.1",
+    "gulp-natural-sort": "^0.1.1",
+    "gulp-notify": "^3.2.0",
+    "gulp-plumber": "^1.2.1",
+    "gulp-postcss": "^8.0.0",
+    "gulp-rev": "^9.0.0",
+    "gulp-uglify": "^3.0.2"
   }
 }

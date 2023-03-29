@@ -1,0 +1,10 @@
+#ld--home {
+	overflow: hidden;
+}
+#ld--home--filter {
+	border-right: 1px solid #ccc;
+	width: 445px;
+}
+#ld--home--filter > md-content {
+	overflow: hidden;
+}

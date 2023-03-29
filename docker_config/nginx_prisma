@@ -1,0 +1,33 @@
+server {
+  listen 80;
+  listen [::]:80;
+
+  # Example domain
+  server_name prisma.de;
+  return 308 https://$host$request_uri;
+}
+
+server {
+  listen 443 ssl;
+  listen [::]:443 ssl;
+
+  server_name prisma.de;
+
+  ssl_certificate /root/keys/prisma.de.crt;
+  ssl_certificate_key /root/keys/prisma.de.key;
+  ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
+  ssl_prefer_server_ciphers on;
+  ssl_ciphers 'EECDH+AESGCM:EDH+AESGCM:AES256+EECDH:AES256+EDH';
+
+  # ssl_stapling on;
+  # ssl_stapling_verify on;
+  # ssl_trusted_certificate /root/keys/prisma.de.crt;
+  # resolver [ip of custom dns server];
+
+  location / {
+    proxy_set_header Host $host;
+    proxy_set_header X-Real-IP $remote_addr;
+    proxy_pass http://localhost:8002/;
+    proxy_buffering off;
+  }
+}

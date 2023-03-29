@@ -17,8 +17,16 @@ class RedirectIfAuthenticated
      */
     public function handle($request, Closure $next, $guard = null)
     {
-        if (Auth::guard($guard)->check()) {
-            return redirect('/');
+        if (is_null($guard))
+            $guards = config('auth.guard-chain');
+        else
+            $guards = [$guard];
+
+        foreach ($guards as $guard) {
+            if (Auth::guard($guard)->check()) {
+                Auth::setDefaultDriver($guard);
+                return redirect('/');
+            }
         }
 
         return $next($request);

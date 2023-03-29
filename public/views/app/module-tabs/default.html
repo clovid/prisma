@@ -1,0 +1,17 @@
+<div layout="row" style="overflow: hidden;" class="module-tabs--default">
+	<div layout="column" class="module-tabs--default--questions" layout-fill layout-align="start start">
+		<div md-whiteframe="1" ng-repeat="question in vm.data.questions">
+			<!-- Group of questions -->
+			<div ld-question-collection collection="question" ng-if="question.type === undefined" class="ld-question-collection"></div>
+			<!-- Freetext question -->
+			<div ld-question-open data="question" ng-if="question.type === 'open'"></div>
+			<div ld-question-open data="question" compare="true" ng-if="question.type === 'open-compare'"></div>
+			<!-- MC question -->
+			<div ld-question-basic data="question" ng-if="question.type === 'basic'"></div>
+			<!-- Ranking question -->
+			<div ld-question-ranking data="question" ng-if="question.type === 'ranking'"></div>
+			<!-- Frequency Distribution -->
+			<div ld-frequency-distribution data="question" ng-if="question.type === 'frequency-distribution'"></div>
+		</div>
+	</div>
+</div>

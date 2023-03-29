@@ -1,0 +1,11 @@
+.question-basic--head {
+	background-color: #ccc;
+	font-weight: 700;
+	padding-right: 20px;
+	min-height: 45px;
+}
+
+.question-basic-table .additional {
+	color: #777;
+	font-style: italic;
+}

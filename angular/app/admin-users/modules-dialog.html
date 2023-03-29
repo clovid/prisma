@@ -1,0 +1,18 @@
+<md-dialog aria-label="Module-Dialog">
+	<md-toolbar>
+		<div class="md-toolbar-tools">
+			<h2 translate>adminUsers.moduleDialog.title</h2>
+			<span flex></span>
+			<md-button class="md-icon-button" ng-click="vm.cancel($event)">
+				<md-icon>close</md-icon>
+			</md-button>
+		</div>
+	</md-toolbar>
+	<md-dialog-content>
+		<ld-simple-tree items="vm.modules" selected-items="vm.selectedModules" title-property="title"></ld-simple-tree>
+	</md-dialog-content>
+	<md-dialog-actions layout="row" layout-align="end center">
+		<md-button ng-click="vm.cancel()"><md-icon>close</md-icon> {{ 'abort' | translate }}</md-button>
+		<md-button class="md-primary md-raised" ng-click="vm.submit(vm.selectedModules)"><md-icon>save</md-icon> {{ 'apply' | translate }}</md-button>
+	</md-dialog-actions>
+</md-dialog>

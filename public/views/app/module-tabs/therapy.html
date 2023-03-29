@@ -1,0 +1,28 @@
+<!-- <div layout-padding class="md-headline">Rezepte und Arbeitsunfähigkeitsbescheinigung</div> -->
+<div layout="column" layout-gt-sm="row">
+	<div flex layout="column">
+		<div ng-if="mtCtrl.task.data.therapy.drugs" layout-margin>
+			<div class="md-title" translate>moduleTabs.therapy.drugs</div>
+			<div ld-grouped-frequency-distribution data="mtCtrl.task.data.therapy.drugs" md-whiteframe="1"></div>
+		</div>
+		<div ng-if="mtCtrl.task.data.therapy.narcoticDrugs" layout-margin>
+			<div class="md-title" translate>moduleTabs.therapy.narcoticDrugs</div>
+			<div ld-grouped-frequency-distribution data="mtCtrl.task.data.therapy.narcoticDrugs" md-whiteframe="1"></div>
+		</div>
+	</div>
+	<div flex layout="column">
+		<div ng-if="mtCtrl.task.data.therapy.incapacityCertificate.type" layout-margin>
+			<div class="md-title" translate>moduleTabs.therapy.incapacityCertificate</div>
+			<div ld-frequency-distribution data="mtCtrl.task.data.therapy.incapacityCertificate.type" md-whiteframe="1"></div>
+			<div ld-frequency-distribution data="mtCtrl.task.data.therapy.incapacityCertificate.duration" md-whiteframe="1"></div>
+		</div>
+		<div ng-if="mtCtrl.task.data.therapy.referral.to" layout-margin>
+			<div class="md-title" translate>moduleTabs.therapy.referralTo</div>
+			<div ld-frequency-distribution data="mtCtrl.task.data.therapy.referral.to" md-whiteframe="1"></div>
+		</div>
+		<div ng-if="mtCtrl.task.data.therapy.hospital.emergency" layout-margin>
+			<div class="md-title" translate>moduleTabs.therapy.emergency</div>
+			<div ld-frequency data="mtCtrl.task.data.therapy.hospital.emergency" md-whiteframe="1"></div>
+		</div>
+	</div>
+</div>

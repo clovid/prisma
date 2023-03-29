@@ -1,0 +1,23 @@
+<md-content layout-margin>
+	<h2 class="md-display-1" translate>moduleTasks.title</h2>
+	<table class="ld--simple-table">
+		<thead>
+			<tr>
+				<td translate>moduleTasks.task</td>
+				<td translate>moduleTasks.datasets</td>
+				<td></td>
+			</tr>
+		</thead>
+		<tbody>
+			<tr ng-repeat="task in modCtrl.taskList">
+				<td>{{ task.title }}</td>
+				<td>{{ task.numberOfDatasets | number }}</td>
+				<td>
+					<md-button ng-disabled="task.numberOfDatasets < modCtrl.privacyConfig.minimum_task_datasets" class="md-raised" ng-click="modCtrl.openTask(task)">
+						{{ 'moduleTasks.show' | translate }} <md-icon>exit_to_app</md-icon>
+					</md-button>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+</md-content>

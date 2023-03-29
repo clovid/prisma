@@ -1,0 +1,12 @@
+.acc-tree .tree-item:hover {
+	background-color: #e5e5e5;
+}
+
+.acc-tree .tree-item:hover .tree-item-toggle {
+	border-right: 1px solid #ddd;
+	padding-right: 3px;
+}
+
+.acc-tree .tree-item-toggle:hover {
+	background-color: #ddd;
+}

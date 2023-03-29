@@ -1,0 +1,47 @@
+.question-ranking--table {
+    width: auto;
+    border: 1px solid #ccc;
+    margin: 5px;
+}
+
+.question-ranking--table--rows, .question-ranking--table--cols {
+    cursor: default;
+}
+
+.question-ranking--table > tbody > tr {
+    transition: none;
+}
+
+.question-ranking--table td:first-child {
+    text-align: right;
+    font-weight: bold;
+}
+
+.question-ranking--table tr:last-child td {
+    border-bottom: none;
+}
+
+.question-ranking--table--cell {
+    cursor: pointer;
+}
+
+.question-ranking--table--cell.success {
+    background: #8BC34A;
+    font-weight:  bold;
+}
+
+.question-ranking--table--cols.col-hover, .question-ranking--table--cell.col-hover {
+    background: #eee;
+}
+
+.question-ranking--table--cell.col-hover.success {
+    background: #8bc34a;
+}
+
+.question-ranking--table--cell:hover {
+    background: #ccc;
+}
+
+.question-ranking--table--cell.success:hover {
+    background: #6c9839;
+}

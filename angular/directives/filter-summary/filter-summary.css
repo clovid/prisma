@@ -1,0 +1,56 @@
+.filter-summary {
+	font-size: 16px;
+}
+
+.filter-summary-badge {
+	background: #ddd;
+    padding: 5px 8px;
+    margin: 2px;
+    border-radius: 15px;
+    cursor: default;
+}
+
+.filter-summary-badge > span, .filter-summary .ngdo-contents span {
+	font-size: 0.8em;
+}
+
+.filter-summary-bag {
+	/*color: #999;*/
+	font-style: italic;
+	cursor: pointer;
+}
+
+.filter-summary-placeholder {
+	color: #999;
+}
+
+.filter-summary .ngdo-contents {
+    color: #fff;
+    background: #00000096;
+    border-radius: 10px;
+    /*margin-top: 8px;*/
+}
+
+.filter-summary .ngdo-contents:after {
+	bottom: 100%;
+	left: 50%;
+	border: solid transparent;
+	content: " ";
+	height: 0;
+	width: 0;
+	position: absolute;
+	pointer-events: none;
+	border-color: rgba(136, 183, 213, 0);
+	border-bottom-color: #00000096;
+	border-width: 10px;
+	margin-left: -10px;
+}
+
+.filter-summary .ngdo-contents > div {
+    border-bottom: 1px solid #fdfdfd40;
+    padding: 5px 10px;
+}
+
+.filter-summary .ngdo-contents > div:last-child {
+    border-bottom: none;
+}

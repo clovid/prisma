@@ -1,0 +1,131 @@
+{
+  "toolbar": {
+    "numberOfDatasets": "{{ datasets }} Datasets voor",
+    "filter": {
+      "noUserFilter": "Geen studentenfilter ingesteld",
+      "noTimeFilter": "Geen tijdfilter ingesteld",
+      "moreDatasets": "+{ datasets }} meer",
+      "timeTill": "naar"
+    },
+    "menu": {
+      "loggedInAs": "Geregistreerd als",
+      "userManagement": "Gebruikersadministratie",
+      "language": "Taal",
+      "logout": "Log uit."
+    }
+  },
+  "yes": "Ja",
+  "no": "Geen",
+  "abort": "Annuleren",
+  "apply": "Overnemen",
+  "login": {
+    "username": "Gebruikers-ID",
+    "usernameRequired": "Voer uw gebruikers-ID in",
+    "password": "Wachtwoord",
+    "passwordRequired": "Voer uw wachtwoord in",
+    "buttonTitle": "Aanmelden bij PRISMA",
+    "button": "Log in."
+  },
+  "home": {
+    "filter": {
+      "title": "Filter",
+      "store": "Huidige filter opslaan",
+      "restore": "Opgeslagen filter herstellen",
+      "byStudents": "Volgens de studenten",
+      "byTime": "Na verloop van tijd",
+      "time": {
+        "between": "Tussen",
+        "and": "en",
+        "oclock": "Klok"
+      },
+      "apply": "Filter toepassen",
+      "reset": "Filter verwijderen",
+      "chooseDate": "Kies datum"
+    },
+    "title": "Resultaat",
+    "modules": "Module",
+    "datasets": "Gegevensreeksen",
+    "show": "Bekijk"
+  },
+  "module": {
+    "title": "Overzicht"
+  },
+  "moduleTasks": {
+    "title": "Selectie van gevallen",
+    "task": "Zaak",
+    "datasets": "Gegevensreeksen",
+    "show": "Bekijk"
+  },
+  "moduleTabs": {
+    "therapy": {
+      "drugs": "Geneesmiddelen",
+      "narcoticDrugs": "BtM drugs",
+      "incapacityCertificate": "Bewijs van arbeidsongeschiktheid",
+      "referralTo": "Met verdere behandeling",
+      "emergency": "Ziekenhuisbehandeling"
+    }
+  },
+  "adminUsers": {
+    "title": "Gebruikersaccounts",
+    "filterResult": "({{ totaal }} totaal, {{ gefilterd }} gefilterd)",
+    "addUser": "Nieuwe gebruiker aanmaken",
+    "filter": "Filter:",
+    "name": "Naam",
+    "permissions": "Rechts",
+    "selectedUsers": "{{ deelverzameling }} van {{ totaal }} Geselecteerde gebruikersaccounts",
+    "clearSelection": "Selectie annuleren",
+    "changeModulePermission": "Wijzig module toegang",
+    "deleteUser": "Gebruiker verwijderen",
+    "table": {
+      "login": "Inloggen",
+      "firstname": "Voornaam",
+      "lastname": "Achternaam",
+      "isActivated": "Geactiveerd?",
+      "isAdmin": "Admin?",
+      "modules": "Modules",
+      "actions": "Acties",
+      "page": "Pagina",
+      "rowsPerPage": "Inzendingen per pagina",
+      "of": "van"
+    },
+    "moduleDialog": {
+      "title": "Geactiveerde modules kiezen"
+    },
+    "userDialog": {
+      "title": "Gebruiker aanmaken",
+      "notice": "Maak alleen in uitzonderlijke gevallen nieuwe gebruikers aan. In de regel moeten alle personen inloggen met de persoonlijke @uni-muenster.de identifier.",
+      "fields": {
+        "loginRequired": "Gelieve een inlognaam toe te kennen",
+        "firstnameRequired": "Voer een voornaam in",
+        "lastnameRequired": "Voer de achternaam in",
+        "password": "Wachtwoord",
+        "passwordRequired": "Stel een wachtwoord in",
+        "passwordMinLength": "Voer ten minste 5 tekens in"
+      },
+      "modulePermissions": "Module toegang voor de gebruiker",
+      "generatePassword": "Nieuw wachtwoord genereren",
+      "apply": "Gebruiker aanmaken"
+    }
+  },
+  "questions": {
+    "highlightSolution": "Oplossing tonen",
+    "hideSolution": "Oplossing verbergen",
+    "frequency": "Frequentie",
+    "showAnswers": "Antwoorden tonen",
+    "hideAnswers": "Verberg antwoorden",
+    "transposeTable": "Transponeer tabel",
+    "showRegion": "Verberg gebied",
+    "hideRegion": "Toon gebied",
+    "zoomAnnotation": "Spring naar de overeenkomstige marker"
+  },
+  "errors": {
+    "externalServer": "Er is een probleem met de externe server.",
+    "unauthorized": "Registratie verplicht!",
+    "forbidden": "De benodigde permissies voor deze actie ontbreken!",
+    "notFound": "Er is een fout opgetreden: de URL {{ url }} is niet bereikbaar!",
+    "methodNotAllowed": "Er is een fout opgetreden: deze actie is niet mogelijk!",
+    "filterToLarge": "De studentenfilter is te groot, selecteer minder studenten.",
+    "unprocessableEntity": "Er is een fout opgetreden: controleer uw invoer!",
+    "tooManyRequests": "Er zijn te veel verzoeken verzonden. Wacht even."
+  }
+}

@@ -1,0 +1,27 @@
+# This is a sample build configuration for JavaScript.
+# Check our guides at https://confluence.atlassian.com/x/14UWN for more examples.
+# Only use spaces to indent your .yml configuration.
+# -----
+# You can specify a custom docker image from Docker Hub as your build environment.
+pipelines:
+  branches:
+    production:
+    - step:
+        name: Deploy
+        deployment: production
+        script:
+          - cd docker_config
+          - docker build --rm -f app.dockerfile -t docker.uni-muenster.de/prisma-app ../
+          - docker build --rm -f web.dockerfile -t docker.uni-muenster.de/prisma-web ../
+          - docker login docker.uni-muenster.de --username $DOCKER_USERNAME --password $DOCKER_PASSWORD
+          - docker push docker.uni-muenster.de/prisma-app
+          - docker push docker.uni-muenster.de/prisma-web
+          # - pipe: atlassian/ssh-run:0.1.3
+          #   variables:
+          #     SSH_USER: $PRODUCTION_USER
+          #     SERVER: $PRODUCTION_SERVER
+          #     COMMAND: 'docker pull docker.uni-muenster.de/prisma-app && docker pull docker.uni-muenster.de/prisma-web && cd $PRODUCTION_PATH && docker-compose up -d'
+        services:
+          - docker
+        caches:
+          - docker

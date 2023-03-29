@@ -23,6 +23,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        $this->app->singleton('OmeroService', function ($app) {
+            return new \App\Services\OmeroService();
+        });
     }
 }
