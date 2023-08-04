@@ -76,6 +76,7 @@ class VQuestOnlineAggregator
 			'list' => 'lists/{id}',
 			'overlay' => 'overlays/{id}',
 			'slice' => 'slices/{number}',
+			'token' => 'token',
 		];
 	}
 
@@ -568,8 +569,30 @@ class VQuestOnlineAggregator
       $imageInformation
     );
 
+		if (!isset($image['type']) || !in_array($image['type'], ['wsi', 'meta'])) {
+			$image['type'] = 'old';
+		}
+
 		if (isset($image['type']) && isset($image['url']) && $image['type'] === 'wsi') {
 			$image['url'] = resolve('OmeroService')->prepareAndAuthenticateUrl($image['url']);
+		}
+		if (isset($image['type']) && isset($image['url']) && $image['type'] === 'meta') {
+			$token = $this->getStaticResource('token')['token'];
+			$params = [
+				'imageId' => $image['id'],
+				'windowCenter' => $image['windowCenter'] ?? 0,
+				'windowWidth' => $image['windowWidth'] ?? 0,
+				'token' => $token,
+			];
+			if (!empty($image['overlays'])) {
+				$params['overlayIds'] = implode(',', $image['overlays']);
+			}
+			$image['url'] = $this->baseUrl . 'cornerstone-viewer/index.html?' . implode(
+				'&',
+				array_map(function ($key) use ($params) {
+					return $key . '=' . $params[$key];
+				}, array_keys($params))
+			);
 		}
 
 		return $image;
@@ -629,7 +652,7 @@ class VQuestOnlineAggregator
 		return collect($items);
 	}
 
-	private function getStaticResource($resource, $id)
+	private function getStaticResource($resource, $id = '')
 	{
 		$route = str_replace('{id}', $id, $this->api[$resource]);
 		$seconds = $this->getCacheDurationForResource($resource);

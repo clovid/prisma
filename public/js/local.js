@@ -900,6 +900,9 @@
             sendAction(instance, 'hide_all_annotations');
             sendAction(instance, 'disable_interaction');
             break;
+          case 'regions_created':
+            sendAction(instance, 'enable_comments');
+            break;
           case 'REGIONS_PROPERTY_CHANGED':
             var properties = omeroMessage.params.properties;
             if (properties && properties.length === 1 &&properties[0] === 'selected') {
@@ -1516,6 +1519,96 @@
 
 	angular
 		.module('prisma.services')
+		.service('cornerstoneService', cornerstoneService);
+
+  cornerstoneService.$inject = [];
+
+	function cornerstoneService () {
+    this.register = register;
+    this.sendActionByInstanceId = function (instanceId, action, payload) {
+      var instance = instances[instanceId];
+      sendAction(instance, action, payload);
+    };
+
+    var instances = [];
+    var initialized = false;
+    var targetOrigin = '*';
+    var messageContext = 'cornerstone_viewer'; // shared "secret"
+
+    if (!initialized) {
+      init();
+    }
+		////////////////
+
+    function register (element, handleEvent) {
+      instances.push({
+        el: element.get(0),
+        eventHandler: handleEvent
+      });
+      return instances.length - 1;
+    }
+
+    function init () {
+      initialized = true;
+      window.addEventListener('message', handleMessage);
+    }
+
+    function handleMessage (event) {
+      if (!event.data || !event.data.context || event.data.context !== messageContext) {
+        return;
+      }
+      var message = event.data
+      var instance;
+      for (var i = 0; i < instances.length; i++) {
+        if (instances[i].el.contentWindow === event.source) {
+          instance = instances[i];
+          break;
+        }
+      }
+      if (!instance) {
+        return;
+      }
+      if (message.type === 'event') {
+        switch (message.name) {
+          case 'handshake':
+            instance.viewerId = message.params.viewerId;
+            sendEvent(instance, 'initialized');
+            break;
+          default:
+            console.log('cornerstone viewer event', {name: message.name, params: message.params});
+            break;
+        }
+      }
+    }
+
+    function sendEvent(instance, name) {
+      sendMessage(instance, 'event', name);
+    }
+
+    function sendAction(instance, name, payload) {
+      sendMessage(instance, 'action', name, payload);
+    }
+
+    function sendMessage(instance, type, name, payload) {
+      instance.el.contentWindow.postMessage(
+        {
+          context: messageContext,
+          target: instance.viewerId,
+          type: type,
+          name: name,
+          payload: payload,
+        },
+        targetOrigin
+      );
+    }
+  }
+})();
+
+(function () {
+	'use strict';
+
+	angular
+		.module('prisma.services')
 		.service('accountsService', accountsService);
 
 	accountsService.$inject = ['$log', '$http', '$q', '$httpOneConcurrentRequestFactory', '_', 'treeService', 'filterService'];
@@ -1891,7 +1984,7 @@
     function routes ($stateProvider, $urlRouterProvider) {
 
         var getView = function( viewName ){
-            return '/views/app/' + viewName + '/' + viewName + '.html';
+            return 'views/app/' + viewName + '/' + viewName + '.html';
         };
 
         $urlRouterProvider.otherwise(function ($injector, $location) {
@@ -2031,7 +2124,7 @@
 						url: name,
 						views: {},
 					};
-					stateConfig.views[name] = {templateUrl: '/views/app/module-tabs/' + template + '.html'};
+					stateConfig.views[name] = {templateUrl: 'views/app/module-tabs/' + template + '.html'};
 					if (controllerAs) {
 						stateConfig.views[name].controller = controllerAs;
 					}
@@ -2419,10 +2512,10 @@
 		return directive;
 
 		function link (scope, element, attrs) {
-			if (scope.vm.image.type === 'wsi') {
+			if (['meta', 'wsi'].includes(scope.vm.image.type)) {
 				$timeout(function () {
 					var iframe = element.find('iframe');
-					scope.vm.registerIframe(iframe);
+					scope.vm.registerIframe(iframe, scope.vm.image.type);
 				});
 			}
 			element.bind('keydown keypress', function (event) {
@@ -2438,20 +2531,19 @@
 		}
 	}
 
-	Controller.$inject = ['$log', '$rootScope', '$scope', '$timeout', 'userService', 'omeroService'];
+	Controller.$inject = ['$log', '$rootScope', '$scope', '$timeout', 'userService', 'omeroService', 'cornerstoneService'];
 
-	function Controller ($log, $rootScope, $scope, $timeout, userService, omeroService) {
+	function Controller ($log, $rootScope, $scope, $timeout, userService, omeroService, cornerstoneService) {
 		var vm = this;
 		var activeSlice;
 
 		vm.$onInit = function() {
-			console.log('image', vm.image);
 			var activeSlice = vm.image.slices && vm.image.slices[vm.image.currentSlice];
 			vm.state = {
 				image: {
 					visible: false,
 					activeSlice: activeSlice,
-					url: getUrl(activeSlice),
+					url: getUrl(vm.image, activeSlice),
 					title: vm.image.title,
 				},
 				overlay: {
@@ -2472,7 +2564,7 @@
 				zoomLevels: 6,
 				scalePerZoomLevel: 1.8,
 				// TODO: what should be the neutral zoom level?
-				neutralZoomLevel: 4,
+				neutralZoomLevel: 1,
 				initialZoomToFit: {
 					x: 0,
 					y: 0,
@@ -2492,8 +2584,17 @@
 			vm.registerIframe = registerIframe;
 		}
 
-		function registerIframe(element) {
-			vm.state.image.omeroId = omeroService.register(element, handleEvent);
+		vm.$onDestroy = function() {
+			vm.image.active = false;
+		}
+
+		function registerIframe(element, imageType) {
+			if (imageType === 'wsi') {
+				vm.state.image.iframeId = omeroService.register(element, handleEvent);
+			}
+			if (imageType === 'meta') {
+				vm.state.image.iframeId = cornerstoneService.register(element, handleEvent);
+			}
 		}
 
 		function handleEvent(event) {
@@ -2508,13 +2609,15 @@
 			}
 		}
 
-		function getUrl(slice) {
+		function getUrl(image, slice) {
 			if (!slice || !slice.hash) {
-				return;
+				if (!image.url) {
+					return;
+				}
+				return image.url + '?user_ticket=' + userService.token();
 			}
-			return '/images/' + slice.hash + '?user_ticket=' + userService.token();
+			return 'images/' + slice.hash + '?user_ticket=' + userService.token();
 		}
-
 
 		$scope.$on('change-image', function (event, config) {
 			if (config.imageId !== vm.image.id) {
@@ -2633,8 +2736,10 @@
 
 					if (vm.image.type === 'wsi') {
 						var marks = _.map(vm.state.marks.data, function (item) { return item.id; });
-						omeroService.sendActionByInstanceId(vm.state.image.omeroId, 'show_annotations', {annotationIds: marks});
-						omeroService.sendActionByInstanceId(vm.state.image.omeroId, 'zoom_to_annotations', {annotationIds: marks});
+						omeroService.sendActionByInstanceId(vm.state.image.iframeId, 'show_annotations', {annotationIds: marks});
+						omeroService.sendActionByInstanceId(vm.state.image.iframeId, 'zoom_to_annotations', {annotationIds: marks});
+					} else if (vm.image.type === 'meta') {
+						cornerstoneService.sendActionByInstanceId(vm.state.image.iframeId, 'show_points', {points: config.marks.map(({x,y,z}) => [x,y,z])});
 					} else {
 						var groupedMarks = _.reduce(config.marks, function (carry, item) {
 							if (!carry[item[2]]) {
@@ -2664,7 +2769,9 @@
 					if (vm.state.marks.visible) {
 						if (vm.image.type === 'wsi') {
 							var marks = _.map(vm.state.marks.data, function (item) { return item.id; });
-							omeroService.sendActionByInstanceId(vm.state.image.omeroId, 'hide_annotations', {annotationIds: marks});
+							omeroService.sendActionByInstanceId(vm.state.image.iframeId, 'hide_annotations', {annotationIds: marks});
+						} else if (vm.image.type === 'meta') {
+							cornerstoneService.sendActionByInstanceId(vm.state.image.iframeId, 'hide_points');
 						} else {
 							_.each(vm.image.slices, function (slice) {
 								if (slice.marks) {
@@ -2680,24 +2787,30 @@
 
 			if (resource === 'mark') {
 				if (action === 'deselect') {
-					if (vm.image.type !== 'wsi') {
-						console.log('TODO: implement deselect-mark for images other that wsi');
+					if (vm.image.type === 'wsi') {
+						omeroService.sendActionByInstanceId(vm.state.image.iframeId, 'deselect_annotation', {annotationId: config.mark});
+					} else if (vm.image.type === 'meta') {
+						console.log('TODO: implement deselect-mark for meta images');
 					} else {
-						omeroService.sendActionByInstanceId(vm.state.image.omeroId, 'deselect_annotation', {annotationId: config.mark});
+						console.log('TODO: implement deselect-mark for images other that wsi');
 					}
 				}
 				if (action === 'select') {
-					if (vm.image.type !== 'wsi') {
-						console.log('TODO: implement select-mark for images other that wsi');
+					if (vm.image.type === 'wsi') {
+						omeroService.sendActionByInstanceId(vm.state.image.iframeId, 'pan_to_annotation', {annotationId: config.mark, select: true});
+					} else if (vm.image.type === 'meta') {
+						console.log('TODO: implement select-mark for meta images');
 					} else {
-						omeroService.sendActionByInstanceId(vm.state.image.omeroId, 'pan_to_annotation', {annotationId: config.mark, select: true});
+						console.log('TODO: implement select-mark for images other that wsi');
 					}
 				}
 				if (action === 'zoom') {
-					if (vm.image.type !== 'wsi') {
-						console.log('TODO: implement zoom-mark for images other that wsi');
+					if (vm.image.type === 'wsi') {
+						omeroService.sendActionByInstanceId(vm.state.image.iframeId, 'zoom_to_annotation', {annotationId: config.mark, select: true});
+					} else if (vm.image.type === 'meta') {
+						console.log('TODO: implement zoom-mark for meta images');
 					} else {
-						omeroService.sendActionByInstanceId(vm.state.image.omeroId, 'zoom_to_annotation', {annotationId: config.mark, select: true});
+						console.log('TODO: implement zoom-mark for images other that wsi');
 					}
 				}
 			}
@@ -2708,7 +2821,7 @@
 						$log.error('Overlay ID missing:', action, resource, config, vm.image);
 						return;
 					}
-					if (vm.image.type === 'wsi') {
+					if (['wsi', 'meta'].includes(vm.image.type)) {
 						var overlaySlice = config.overlayId;
 					} else {
 						var overlaySlice = _.findWhere(vm.state.image.activeSlice.overlays, {id: config.overlayId});
@@ -2763,7 +2876,7 @@
 		}
 
 		function updateUrl(imageSlice) {
-			var newUrl = getUrl(imageSlice);
+			var newUrl = getUrl(vm.state.image, imageSlice);
 			if (!newUrl || vm.state.image.url === newUrl)
 				return;
 			vm.state.image.url = newUrl;
@@ -2786,10 +2899,13 @@
 
 			if (vm.image.type === 'wsi') {
 				vm.state.overlay.annotationId = overlaySlice;
-				omeroService.sendActionByInstanceId(vm.state.image.omeroId, 'show_annotations', {annotationIds: overlaySlice.split(',')});
+				omeroService.sendActionByInstanceId(vm.state.image.iframeId, 'show_annotations', {annotationIds: overlaySlice.split(',')});
+			} else if (vm.image.type === 'meta') {
+				vm.state.overlay.annotationId = overlaySlice;
+				cornerstoneService.sendActionByInstanceId(vm.state.image.iframeId, 'show_overlay', {overlayId: overlaySlice});
 			} else {
 				vm.state.overlay.activeSlice = overlaySlice;
-				var overlayUrl = getUrl(overlaySlice);
+				var overlayUrl = getUrl(vm.state.image, overlaySlice);
 				if (!overlayUrl || vm.state.overlay.url === overlayUrl)
 					return;
 				var overlayConfig = _.findWhere(vm.image.overlays, {id: overlaySlice.id});
@@ -2809,8 +2925,11 @@
 			}
 
 			if (vm.image.type === 'wsi' && vm.state.overlay.annotationId) {
-				omeroService.sendActionByInstanceId(vm.state.image.omeroId, 'hide_annotations', {annotationIds: vm.state.overlay.annotationId.split(',')});
+				omeroService.sendActionByInstanceId(vm.state.image.iframeId, 'hide_annotations', {annotationIds: vm.state.overlay.annotationId.split(',')});
 				vm.state.overlay.annotationId = null;
+			}
+			if (vm.image.type === 'meta' && vm.state.overlay.annotationId) {
+				cornerstoneService.sendActionByInstanceId(vm.state.image.iframeId, 'hide_overlay', {overlayId: vm.state.overlay.annotationId});
 			}
 		}
 
@@ -3659,6 +3778,11 @@
 			});
 		}
 
+		vm.$onDestroy = function() {
+			vm.data.showAnswers = false;
+			vm.data.showSolution = false;
+		}
+
 		function handleChangedMarker(config, wasSelected) {
 			if (config.skipUpdate) {
 				return;
@@ -4311,8 +4435,11 @@
 		.config(configure);
 
 	configure.$inject = ['$authProvider'];
+
 	function configure ($authProvider) {
-		$authProvider.loginUrl = '/login';
+
+		$authProvider.baseUrl = document.getElementsByTagName('base')[0].href;
+		$authProvider.loginUrl = 'login';
 		$authProvider.tokenName = 'user_ticket';
 	}
 })();
@@ -4344,7 +4471,7 @@
 				var wantedTabName = $location.search().goto;
 				if (wantedTabName === undefined) {
 					// If not, go to the first supported tab
-					return $state.go('.' + supportedTabs[0].name, {}, { reload: true });
+					return $state.go(($state.is('module.task') ? '' : 'module.task') + '.' + supportedTabs[0].name, {}, { reload: true });
 				} else {
 					// If wanted tab is not supported go back to tasks overview
 					if (_.findWhere(supportedTabs, { name: wantedTabName }) === undefined) {
@@ -4999,7 +5126,7 @@
 					selectedModules: selectedModules,
 				},
 				bindToController: true,
-				templateUrl: '/views/app/admin-users/modules-dialog.html',
+				templateUrl: 'views/app/admin-users/modules-dialog.html',
 				parent: angular.element(document.body),
 				targetEvent: event,
 				clickOutsideToClose: true
@@ -5020,7 +5147,7 @@
 					modules: usersService.modules(),
 				},
 				bindToController: true,
-				templateUrl: '/views/app/admin-users/user-dialog.html',
+				templateUrl: 'views/app/admin-users/user-dialog.html',
 				parent: angular.element(document.body),
 				targetEvent: event,
 				clickOutsideToClose: true

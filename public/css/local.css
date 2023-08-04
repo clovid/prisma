@@ -273,7 +273,7 @@ md-tab-content > div {
 .cf--login--wrapper {
 	/*http://shop.farbnische.de/fani/fani-limette-2/*/
 	/*important: we need copyrights before we go live*/
-	background-image: url('/images/login/login_teaser.jpg');
+	background-image: url('../images/login/login_teaser.jpg');
 	background-size: cover;
 	background-position: right;
 }

@@ -1,4 +1,4 @@
-<div class="md-title" layout="row" layout-align="start center">
+<div class="md-title" layout="row" layout-align="start center" ng-if="vm.collection.title || vm.collection.overlays">
 	<div ng-if="vm.collection.overlays">
 		<md-button ng-click="vm.showOverlay(question)" ng-show="vm.collection.showOverlay" class="md-icon-button" aria-label="Toggle Overlay">
 			<md-tooltip><span translate>questions.showRegion</span></md-tooltip>

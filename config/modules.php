@@ -477,6 +477,7 @@ return [
 				'duration' => 0 // in seconds, 0: forever
 			],
 			'list' => 0,
+			'token' => 10,
 		],
 		'transform' => [
 			'subquestion-title' => [

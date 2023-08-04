@@ -26,10 +26,10 @@
 		return directive;
 
 		function link (scope, element, attrs) {
-			if (scope.vm.image.type === 'wsi') {
+			if (['meta', 'wsi'].includes(scope.vm.image.type)) {
 				$timeout(function () {
 					var iframe = element.find('iframe');
-					scope.vm.registerIframe(iframe);
+					scope.vm.registerIframe(iframe, scope.vm.image.type);
 				});
 			}
 			element.bind('keydown keypress', function (event) {
@@ -45,9 +45,9 @@
 		}
 	}
 
-	Controller.$inject = ['$log', '$rootScope', '$scope', '$timeout', 'userService', 'omeroService'];
+	Controller.$inject = ['$log', '$rootScope', '$scope', '$timeout', 'userService', 'omeroService', 'cornerstoneService'];
 
-	function Controller ($log, $rootScope, $scope, $timeout, userService, omeroService) {
+	function Controller ($log, $rootScope, $scope, $timeout, userService, omeroService, cornerstoneService) {
 		var vm = this;
 		var activeSlice;
 
@@ -102,8 +102,13 @@
 			vm.image.active = false;
 		}
 
-		function registerIframe(element) {
-			vm.state.image.omeroId = omeroService.register(element, handleEvent);
+		function registerIframe(element, imageType) {
+			if (imageType === 'wsi') {
+				vm.state.image.iframeId = omeroService.register(element, handleEvent);
+			}
+			if (imageType === 'meta') {
+				vm.state.image.iframeId = cornerstoneService.register(element, handleEvent);
+			}
 		}
 
 		function handleEvent(event) {
@@ -245,8 +250,10 @@
 
 					if (vm.image.type === 'wsi') {
 						var marks = _.map(vm.state.marks.data, function (item) { return item.id; });
-						omeroService.sendActionByInstanceId(vm.state.image.omeroId, 'show_annotations', {annotationIds: marks});
-						omeroService.sendActionByInstanceId(vm.state.image.omeroId, 'zoom_to_annotations', {annotationIds: marks});
+						omeroService.sendActionByInstanceId(vm.state.image.iframeId, 'show_annotations', {annotationIds: marks});
+						omeroService.sendActionByInstanceId(vm.state.image.iframeId, 'zoom_to_annotations', {annotationIds: marks});
+					} else if (vm.image.type === 'meta') {
+						cornerstoneService.sendActionByInstanceId(vm.state.image.iframeId, 'show_points', {points: config.marks.map(({x,y,z}) => [x,y,z])});
 					} else {
 						var groupedMarks = _.reduce(config.marks, function (carry, item) {
 							if (!carry[item[2]]) {
@@ -276,7 +283,9 @@
 					if (vm.state.marks.visible) {
 						if (vm.image.type === 'wsi') {
 							var marks = _.map(vm.state.marks.data, function (item) { return item.id; });
-							omeroService.sendActionByInstanceId(vm.state.image.omeroId, 'hide_annotations', {annotationIds: marks});
+							omeroService.sendActionByInstanceId(vm.state.image.iframeId, 'hide_annotations', {annotationIds: marks});
+						} else if (vm.image.type === 'meta') {
+							cornerstoneService.sendActionByInstanceId(vm.state.image.iframeId, 'hide_points');
 						} else {
 							_.each(vm.image.slices, function (slice) {
 								if (slice.marks) {
@@ -292,24 +301,30 @@
 
 			if (resource === 'mark') {
 				if (action === 'deselect') {
-					if (vm.image.type !== 'wsi') {
-						console.log('TODO: implement deselect-mark for images other that wsi');
+					if (vm.image.type === 'wsi') {
+						omeroService.sendActionByInstanceId(vm.state.image.iframeId, 'deselect_annotation', {annotationId: config.mark});
+					} else if (vm.image.type === 'meta') {
+						console.log('TODO: implement deselect-mark for meta images');
 					} else {
-						omeroService.sendActionByInstanceId(vm.state.image.omeroId, 'deselect_annotation', {annotationId: config.mark});
+						console.log('TODO: implement deselect-mark for images other that wsi');
 					}
 				}
 				if (action === 'select') {
-					if (vm.image.type !== 'wsi') {
-						console.log('TODO: implement select-mark for images other that wsi');
+					if (vm.image.type === 'wsi') {
+						omeroService.sendActionByInstanceId(vm.state.image.iframeId, 'pan_to_annotation', {annotationId: config.mark, select: true});
+					} else if (vm.image.type === 'meta') {
+						console.log('TODO: implement select-mark for meta images');
 					} else {
-						omeroService.sendActionByInstanceId(vm.state.image.omeroId, 'pan_to_annotation', {annotationId: config.mark, select: true});
+						console.log('TODO: implement select-mark for images other that wsi');
 					}
 				}
 				if (action === 'zoom') {
-					if (vm.image.type !== 'wsi') {
-						console.log('TODO: implement zoom-mark for images other that wsi');
+					if (vm.image.type === 'wsi') {
+						omeroService.sendActionByInstanceId(vm.state.image.iframeId, 'zoom_to_annotation', {annotationId: config.mark, select: true});
+					} else if (vm.image.type === 'meta') {
+						console.log('TODO: implement zoom-mark for meta images');
 					} else {
-						omeroService.sendActionByInstanceId(vm.state.image.omeroId, 'zoom_to_annotation', {annotationId: config.mark, select: true});
+						console.log('TODO: implement zoom-mark for images other that wsi');
 					}
 				}
 			}
@@ -320,7 +335,7 @@
 						$log.error('Overlay ID missing:', action, resource, config, vm.image);
 						return;
 					}
-					if (vm.image.type === 'wsi') {
+					if (['wsi', 'meta'].includes(vm.image.type)) {
 						var overlaySlice = config.overlayId;
 					} else {
 						var overlaySlice = _.findWhere(vm.state.image.activeSlice.overlays, {id: config.overlayId});
@@ -375,7 +390,7 @@
 		}
 
 		function updateUrl(imageSlice) {
-			var newUrl = getUrl(imageSlice);
+			var newUrl = getUrl(vm.state.image, imageSlice);
 			if (!newUrl || vm.state.image.url === newUrl)
 				return;
 			vm.state.image.url = newUrl;
@@ -398,10 +413,13 @@
 
 			if (vm.image.type === 'wsi') {
 				vm.state.overlay.annotationId = overlaySlice;
-				omeroService.sendActionByInstanceId(vm.state.image.omeroId, 'show_annotations', {annotationIds: overlaySlice.split(',')});
+				omeroService.sendActionByInstanceId(vm.state.image.iframeId, 'show_annotations', {annotationIds: overlaySlice.split(',')});
+			} else if (vm.image.type === 'meta') {
+				vm.state.overlay.annotationId = overlaySlice;
+				cornerstoneService.sendActionByInstanceId(vm.state.image.iframeId, 'show_overlay', {overlayId: overlaySlice});
 			} else {
 				vm.state.overlay.activeSlice = overlaySlice;
-				var overlayUrl = getUrl(overlaySlice);
+				var overlayUrl = getUrl(vm.state.image, overlaySlice);
 				if (!overlayUrl || vm.state.overlay.url === overlayUrl)
 					return;
 				var overlayConfig = _.findWhere(vm.image.overlays, {id: overlaySlice.id});
@@ -421,8 +439,11 @@
 			}
 
 			if (vm.image.type === 'wsi' && vm.state.overlay.annotationId) {
-				omeroService.sendActionByInstanceId(vm.state.image.omeroId, 'hide_annotations', {annotationIds: vm.state.overlay.annotationId.split(',')});
+				omeroService.sendActionByInstanceId(vm.state.image.iframeId, 'hide_annotations', {annotationIds: vm.state.overlay.annotationId.split(',')});
 				vm.state.overlay.annotationId = null;
+			}
+			if (vm.image.type === 'meta' && vm.state.overlay.annotationId) {
+				cornerstoneService.sendActionByInstanceId(vm.state.image.iframeId, 'hide_overlay', {overlayId: vm.state.overlay.annotationId});
 			}
 		}
 
