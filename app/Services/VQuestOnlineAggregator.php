@@ -583,6 +583,7 @@ class VQuestOnlineAggregator
 				'windowCenter' => $image['windowCenter'] ?? 0,
 				'windowWidth' => $image['windowWidth'] ?? 0,
 				'token' => $token,
+				'apiUrl' => $this->baseUrl,
 			];
 			if (!empty($image['overlays'])) {
 				$params['overlayIds'] = implode(',', $image['overlays']);
