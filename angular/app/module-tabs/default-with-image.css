@@ -11,6 +11,12 @@
     pointer-events: none;
 }
 
+.module-tabs--default-with-image--images .visibility-hidden {
+    visibility: hidden;
+    height: 0;
+    min-height: 0;
+}
+
 .module-tabs--default-with-image--questions {
     margin-left: 28px;
     overflow-y: scroll;

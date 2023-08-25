@@ -585,6 +585,9 @@ class VQuestOnlineAggregator
 				'token' => $token,
 				'apiUrl' => $this->baseUrl,
 			];
+			if (!empty($image['position'])) {
+				$params['slices'] = implode(',', $image['position']);
+			}
 			if (!empty($image['overlays'])) {
 				$params['overlayIds'] = implode(',', $image['overlays']);
 			}
