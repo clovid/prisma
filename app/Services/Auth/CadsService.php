@@ -20,7 +20,7 @@ class CadsService {
 
     function __construct()
     {
-        if (config('app.env') === 'local')
+        if (config('app.env') !== 'production')
           $this->cads = new DummyCadsLibrary($this->appId);
         else
           $this->cads = new CadsLibrary($this->appId);

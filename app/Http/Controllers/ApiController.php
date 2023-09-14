@@ -16,23 +16,34 @@ class ApiController extends Controller
 {
 	public function accountsForLevel(Request $request, $level = null)
 	{
-		// TODO: make smarter
-		// e.g.: check if some modules allow custom accounts
-		// if so -> group into modules and others. Others will contain AkzentoAPI
-		// if not return AkzentoAPI
-		$userModules = Auth::user()->modules;
-		$moduleWithCustomAccounts = 'vquest-online';
-		if ($userModules->count() === 1 && $userModules[0]->name === $moduleWithCustomAccounts) {
-			if (is_null($level)) {
-				$accountsForLevel = [["name" => "VQuest-Online", "id" => $moduleWithCustomAccounts]];
-			} else {
-				$accountsForLevel = $this->accountsForModule($moduleWithCustomAccounts);
-			}
+		if (is_null($level)) {
+			$userModules = Auth::user()->modules;
+			$accountsForRootLevel = $userModules->map(function ($module) {
+				$accountProvider = config('modules.' . $module->name . '.account-provider');
+				if (!$accountProvider) {
+					try {
+						return AkzentoAPI::getAccounts() ?? [];
+					} catch (\Throwable $th) {
+						return [];
+					}
+				}
+				return [[
+					'id' => $accountProvider . '|',
+					'name' =>  trans('modules.' . $accountProvider . '.title'),
+					'children' => $this->accountsFromProvider($accountProvider),
+				]];
+			})->flatten(1);
+			$accountsForLevel = $accountsForRootLevel->count() > 1 ? $accountsForRootLevel->values() : $accountsForRootLevel[0]['children'];
 		} else {
-			try {
-				$accountsForLevel = AkzentoAPI::getAccounts($level);
-			} catch (\Throwable $th) {
-				$accountsForLevel = [];
+			$levelWithPrefix = explode('|', $level);
+			if (count($levelWithPrefix) > 1) {
+				return $this->accountsFromProvider($levelWithPrefix[0], $levelWithPrefix[1]);
+			} else {
+				try {
+					$accountsForLevel = AkzentoAPI::getAccounts($level) ?? [];
+				} catch (\Throwable $th) {
+					$accountsForLevel = [];
+				}
 			}
 		}
 		return response()->json($accountsForLevel);
@@ -40,29 +51,39 @@ class ApiController extends Controller
 
 	public function leavesForLevel(Request $request, $level)
 	{
-		$userModules = Auth::user()->modules;
-		$moduleWithCustomAccounts = 'vquest-online';
-		if ($userModules->count() === 1 && $userModules[0]->name === $moduleWithCustomAccounts) {
-			$leavesForLevel = $this->accountsForModule($moduleWithCustomAccounts);
+		$levelPrefix = explode('|', $level);
+		if (count($levelPrefix) > 1) {
+			$leavesForLevel = $this->accountsFromProvider($levelPrefix[0], $levelPrefix[1], true);
 		} else {
-			$leavesForLevel = AkzentoAPI::getLeaves($level);
+			try {
+				$leavesForLevel = AkzentoAPI::getAccounts($level);
+			} catch (\Throwable $th) {
+				$leavesForLevel = [];
+			}
 		}
 		return response()->json($leavesForLevel);
 	}
 
-	private function accountsForModule($module) {
-		if ($module !== 'vquest-online') {
-			return [];
-		}
-		$cacheKey = 'module.' . $module . '.accounts';
-		$accounts = Cache::remember($cacheKey, 60, function () use ($module) {
+	private function accountsFromProvider($module, $level = null, $onlyLeaves = false) {
+		$cacheKey = 'module.' . $module . '.accounts.' . $level ?? 'root';
+		$accounts = Cache::remember($cacheKey, 60, function () use ($module, $level, $onlyLeaves) {
 			$client = new RequestService($module);
 			$accountsUrl = config('modules.' . $module . '.routes.accounts');
 			if (!empty($accountsUrl)) {
-				$accountsForLevel = $client->getJson($accountsUrl);
+				$params = [];
+				if (!empty($level)) {
+					$params['level'] = $level;
+				}
+				if ($onlyLeaves) {
+					$params['onlyLeaves'] = true;
+				}
+				$accountsForLevel = $client->getJson($accountsUrl, $params);
 				foreach ($accountsForLevel as &$account) {
-					$account['name'] = $account['name'] . ' (' . $account['id'] . ')';
-					$account['isLeave'] = true;
+					if (!empty($account['isLeave'])) {
+						$account['name'] = $account['name'] . ' (' . $account['id'] . ')';
+					} else {
+						$account['id'] = $module . '|' . $account['id'];
+					}
 				}
 			} else {
 				$accountsForLevel = [];

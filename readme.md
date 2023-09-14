@@ -51,7 +51,19 @@ The following instructions show how to configure and use PRISMA in your own envi
 ### Further configuration
 
 #### Enable students filter
-TBD
+To provide a custom students filter, add `account-provider` to the module config (`config/modules.php`).
+The value needs to be the name of an existing module which implements the route `accounts`.
+
+This should return an json like this:
+```
+[
+  {id: 'user-id', name: 'user-name', isLeave: true}, // for user accounts
+  {id: '[account-provider]|group-id', name: 'group-name', children?: [...]}, // for user groups
+]
+```
+
+If `children` property is not present for user groups, PRISMA will try to load the chilren via the `accounts` route
+using the GET param `level=[group-id]` when the group should be expanded.
 
 #### Add users
 Open [domain]/#!/admin/users/ to open the user dashboard

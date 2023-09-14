@@ -1,4 +1,4 @@
-FROM node:16-alpine AS builder
+FROM public.ecr.aws/docker/library/node:16-alpine AS builder
 WORKDIR /usr/app
 COPY angular /usr/app/angular
 COPY package.json /usr/app/
@@ -7,7 +7,7 @@ COPY gulpfile.js /usr/app/
 COPY postcss.config.js /usr/app
 RUN npm install && npm run prod
 
-FROM php:7.2-fpm-alpine
+FROM public.ecr.aws/docker/library/php:7.3-fpm-alpine
 
 # Install packages and memcached (as special php-ext)
 RUN apk update &&\

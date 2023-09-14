@@ -486,6 +486,7 @@ return [
 		],
 		'tab-config' => [],
 		'pixel' => env('OMERO_API_URL') ? env('OMERO_API_URL') . 'webclient/' : null,
+		'account-provider' => 'vquest-online',
 	],
 
 	'campus' => [

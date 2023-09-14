@@ -1,0 +1,66 @@
+workflow:
+  rules:
+    - if: $CI_COMMIT_REF_NAME == "develop"
+
+stages:
+  - docker
+  - deploy
+
+## See https://gitlab.com/gitlab-examples/ssh-private-key/-/blob/master/.gitlab-ci.yml
+## and https://docs.gitlab.com/ee/ci/yaml/yaml_optimization.html#anchors
+.prepare_ssh: &ssh_script
+  - which ssh-agent || ( apk --update add openssh-client )
+  - eval $(ssh-agent -s)
+  - echo "$SSH_PRIVATE_KEY" | ssh-add -
+  - mkdir -p ~/.ssh
+  - chmod 700 ~/.ssh
+  - ssh-keyscan -t rsa $JUMPHOST_SERVER >> ~/.ssh/known_hosts
+  - echo "$DEPLOY_FINGERPRINT" >> ~/.ssh/known_hosts
+  - chmod 644 ~/.ssh/known_hosts
+
+.docker_login: &docker_login
+  - docker login $DOCKER_REGISTRY --username $DOCKER_USERNAME --password $DOCKER_PASSWORD
+
+docker:
+  stage: docker
+  environment:
+    name: staging
+    action: prepare
+  image: docker:latest
+  tags:
+    - docker-in-docker
+  services:
+    - docker:dind
+  script:
+    - *docker_login
+    - cd docker_config
+    - docker build --rm -f app.dockerfile -t $DOCKER_REGISTRY/prisma-app:$DOCKER_IMAGE_TAG ../
+    - docker build --rm -f web.dockerfile -t $DOCKER_REGISTRY/prisma-web:$DOCKER_IMAGE_TAG ../
+    - docker push $DOCKER_REGISTRY/prisma-app:$DOCKER_IMAGE_TAG
+    - docker push $DOCKER_REGISTRY/prisma-web:$DOCKER_IMAGE_TAG
+
+deploy:
+  stage: deploy
+  environment: staging
+  image: alpine
+  before_script:
+    - *ssh_script
+    # Only needed for production!
+    # - scp -r -J $JUMPHOST_USER@$JUMPHOST_SERVER docker_config/docker-compose.yml $DEPLOY_USER@$DEPLOY_SERVER:$DEPLOY_PATH/
+  script:
+    - ssh -J $JUMPHOST_USER@$JUMPHOST_SERVER $DEPLOY_USER@$DEPLOY_SERVER "docker pull $DOCKER_REGISTRY/prisma-app:$DOCKER_IMAGE_TAG && docker pull $DOCKER_REGISTRY/prisma-web:$DOCKER_IMAGE_TAG && cd $DEPLOY_PATH && docker compose up -d"
+
+docker_production:
+  extends: docker
+  when: manual
+  environment:
+    name: production
+    action: prepare
+
+deploy_to_production:
+  extends: deploy
+  environment: production
+  needs: ["docker_production"]
+  before_script:
+    - *ssh_script
+    - scp -r -J $JUMPHOST_USER@$JUMPHOST_SERVER docker_config/docker-compose.yml $DEPLOY_USER@$DEPLOY_SERVER:$DEPLOY_PATH/

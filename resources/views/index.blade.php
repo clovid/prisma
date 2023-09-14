@@ -21,7 +21,7 @@
 	@endif
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
-<body>
+<body class="env-{{ config('app.env') }}">
     <div ui-view id="content" layout="column"></div>
 	<script src="https://d3js.org/d3.v3.min.js"></script>
 	@if (config('app.debug'))

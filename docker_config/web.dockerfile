@@ -1,4 +1,4 @@
-FROM nginx:alpine
+FROM public.ecr.aws/nginx/nginx:alpine
 
 ADD docker_config/web_prisma /etc/nginx/conf.d/prisma.conf
 

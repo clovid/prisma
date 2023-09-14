@@ -22,7 +22,7 @@ class Controller extends BaseController
             'name' => $module->name,
             'title' => trans('modules.' . $module->name . '.title'),
             'icon' => $module->icon,
-            'active_for_user' => !empty($user) && ($user->is_admin || $user->modules->contains('id', $module->id)),
+            'active_for_user' => !empty($user) && $user->modules->contains('id', $module->id),
         ];
     }
 
