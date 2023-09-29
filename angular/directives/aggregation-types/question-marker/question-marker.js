@@ -180,6 +180,7 @@
 					imageId: vm.data.imageId,
 					questionId: vm.data.id,
 					marks: vm.data.marks,
+					color: vm.data.color,
 				});
 			}
 		}

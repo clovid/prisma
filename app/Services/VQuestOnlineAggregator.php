@@ -496,6 +496,10 @@ class VQuestOnlineAggregator
 			'population' => 0,
 		];
 
+		if (!empty($subquestion['color']) && is_array($subquestion['color'])) {
+			$element['color'] = array_map('intval', $subquestion['color']);
+		}
+
 		if (!is_null($answers) && isset($answers['marker'])) {
 			$element['marks'] = $answers['marker'];
 			$element['population'] = count($element['marks']);
