@@ -329,11 +329,9 @@ class VQuestOnlineAggregator
 
 	/**
 	 * Extracts images from the question that have additional overlays.
-	 * All images with question-specific overlays are added to the tab-wide
-	 * images pool.
 	 *
 	 * @param  array $question
-	 * @return array $preparedImages
+	 * @return array $images
 	 */
 	private function getImagesWithOverlay($question)
 	{
@@ -343,14 +341,8 @@ class VQuestOnlineAggregator
 		$imagesWithOverlay = array_filter(
 			$question['images'],
 			function ($image) {
-				return isset($image['overlays']);
+				return !empty($image['overlays']);
 			}
-		);
-
-		// TODO: needed? we do this already later
-		$this->images = array_merge(
-			$this->images,
-			array_map([$this, 'buildImageVolume'], $imagesWithOverlay)
 		);
 
 		return $imagesWithOverlay;
@@ -567,6 +559,9 @@ class VQuestOnlineAggregator
 		}
 
 		$imageInformation = $this->getStaticResource($type, $imageConfig['id']);
+		if (isset($imageInformation['overlays'])) {
+			unset($imageInformation['overlays']);
+		}
 
 		$image = array_merge(
       $imageConfig,
