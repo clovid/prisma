@@ -5,6 +5,8 @@
 
 .module-tabs--default-with-image--images {
     flex: 0 0 800px;
+    display: flex;
+    flex-direction: column;
 }
 
 .module-tabs--default-with-image--images.resizable.no-transition > div[ld-image] {
@@ -12,9 +14,7 @@
 }
 
 .module-tabs--default-with-image--images .visibility-hidden {
-    visibility: hidden;
-    height: 0;
-    min-height: 0;
+    order: 1;
 }
 
 .module-tabs--default-with-image--questions {

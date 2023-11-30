@@ -259,6 +259,27 @@ md-tab-content > div {
 .rg-right {
 	background-color: #eee;
 }
+
+/* staging */
+.env-staging .cf--login--box {
+	border: 4px solid red;
+}
+.env-staging .cf--login--box::before {
+	content: 'Achtung: Testsystem!';
+	background: red;
+	color: #fff;
+	text-align: center;
+	padding: 10px;
+}
+.env-staging #content > md-toolbar::before {
+	content: 'Achtung: Testsystem!';
+	background: red;
+	color: #fff;
+	text-align: center;
+  font-size: 12px;
+  font-weight: bold;
+}
+
 #ld--home {
 	overflow: hidden;
 }
@@ -331,10 +352,16 @@ md-tab-content > div {
 
 .module-tabs--default-with-image--images {
     flex: 0 0 800px;
+    display: flex;
+    flex-direction: column;
 }
 
 .module-tabs--default-with-image--images.resizable.no-transition > div[ld-image] {
     pointer-events: none;
+}
+
+.module-tabs--default-with-image--images .visibility-hidden {
+    order: 1;
 }
 
 .module-tabs--default-with-image--questions {

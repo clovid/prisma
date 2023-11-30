@@ -185,10 +185,17 @@ class VQuestOnlineAggregator
 			$aggregatedQuestions[] = $this->aggregateQuestion($question, $answers);
 			$this->images = array_merge(
 				$this->images,
-				array_map([$this, 'buildImageVolume'], $question['images'])
+				$question['images']
 			);
 		}
-		$this->images = $this->mergeImagesById($this->images);
+		if ($groupTitle === 'MRT') {
+
+			// dd($this->mergeImagesById($this->images));
+		}
+		$this->images = array_map(
+			[$this, 'buildImageVolume'],
+			$this->mergeImagesById($this->images)
+		);
 		return [
 			'title' => $groupTitle,
 			'questions' => $aggregatedQuestions,
@@ -424,7 +431,6 @@ class VQuestOnlineAggregator
 
 		$attributes = [];
 		foreach ($frequencies as $possibilityIndex => $frequency) {
-			$possibility = $possibilities[$possibilityIndex];
 			$value = $possibilities[$possibilityIndex]['option_text'];
 			// skip possibility if list_entry does not exist (DD) or the possibilty text is
 			if (empty($value))
@@ -501,13 +507,14 @@ class VQuestOnlineAggregator
 			'id' => $subquestion['image_id'],
 			'subquestion_id' => $subquestion['id'],
 			'title' => $subquestion['subquestion_text'],
+			'overlays' => $subquestion['overlays'] ?? [],
 		];
 
 		if (!empty($subquestion['overlays'])) {
 			$element['overlayId'] = implode(',', $subquestion['overlays']);
 		}
 
-		$this->images[] = $this->buildImageVolume($image);
+		$this->images[] = $image;
 
 		return $element;
 	}
@@ -557,6 +564,16 @@ class VQuestOnlineAggregator
 		if (!isset($imageConfig['id'])) {
 			throw new InvalidArgumentException('Image ID is missing for ImageVolume');
 		}
+		// if (!isset($imageConfig['type'])) {
+		// 	throw new InvalidArgumentException('Image type is missing for ImageVolume ' . $imageConfig['id']);
+		// }
+
+		if (isset($imageConfig['subquestion_id'])) {
+			unset($imageConfig['subquestion_id']);
+		}
+		if (empty($imageConfig['overlays'])) {
+			unset($imageConfig['overlays']);
+		}
 
 		$imageInformation = $this->getStaticResource($type, $imageConfig['id']);
 		if (isset($imageInformation['overlays'])) {
@@ -564,18 +581,19 @@ class VQuestOnlineAggregator
 		}
 
 		$image = array_merge(
+      $imageInformation,
       $imageConfig,
-      $imageInformation
     );
 
-		if (!isset($image['type']) || !in_array($image['type'], ['wsi', 'meta'])) {
-			$image['type'] = 'old';
+		if (empty($image['url'])) {
+			throw new InvalidArgumentException('Image url is missing for ImageVolume');
 		}
 
-		if (isset($image['type']) && isset($image['url']) && $image['type'] === 'wsi') {
+		// Prepare image urls for different types
+		if ($image['type'] === 'wsi') {
 			$image['url'] = resolve('OmeroService')->prepareAndAuthenticateUrl($image['url']);
 		}
-		if (isset($image['type']) && isset($image['url']) && $image['type'] === 'meta') {
+		if ($image['type'] === 'meta') {
 			$token = $this->getStaticResource('token')['token'];
 			$params = [
 				'imageId' => $image['id'],
@@ -588,7 +606,7 @@ class VQuestOnlineAggregator
 				$params['slices'] = implode(',', $image['position']);
 			}
 			if (!empty($image['overlays'])) {
-				$params['overlayIds'] = implode(',', $image['overlays']);
+				$params['overlayIds'] = collect($image['overlays'])->unique()->join(',');
 			}
 			$image['url'] = $this->baseUrl . 'cornerstone-viewer/index.html?' . implode(
 				'&',
@@ -597,7 +615,6 @@ class VQuestOnlineAggregator
 				}, array_keys($params))
 			);
 		}
-
 		return $image;
 	}
 
@@ -609,7 +626,9 @@ class VQuestOnlineAggregator
 				$mergedImages[$image['id']] = $image;
 				continue;
 			}
-			$mergedImages[$image['id']] = array_merge($mergedImages[$image['id']], $image);
+			$mergedImage = $mergedImages[$image['id']];
+			$mergedImages[$image['id']] = array_merge($mergedImage, $image);
+			$mergedImages[$image['id']]['overlays'] = array_merge($mergedImage['overlays'] ?? [], $image['overlays'] ?? []);
 		}
 		return $mergedImages;
 	}
@@ -619,7 +638,7 @@ class VQuestOnlineAggregator
 	 * @param  int $testId
 	 * @return array
 	 */
-	private function getAnswers ($testId)
+	protected function getAnswers ($testId)
 	{
 		$route = str_replace('{id}', $testId, $this->api['test-answers']);
 		try {

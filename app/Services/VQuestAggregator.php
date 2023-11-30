@@ -16,7 +16,7 @@ use App\ImageVolume;
 */
 class VQuestAggregator
 {
-	protected $module = 'vquest';
+	protected $module = 'vquest-local';
 
 	/**
 	 * Filter for the answers
@@ -637,11 +637,11 @@ class VQuestAggregator
 	 * @param  int $testId
 	 * @return array
 	 */
-	private function getAnswers ($testId)
+	public function getAnswers ($testId, $filter = null)
 	{
 		$route = str_replace('{id}', $testId, $this->api['test-answers']);
 		try {
-			return $this->client->getJson($route, $this->filter);
+			return $this->client->getJson($route, $filter ?? $this->filter);
 		} catch (GuzzleHttp\Exception\RequestException $e) {
 			if ($e->getCode() === 500) {
 				return [];

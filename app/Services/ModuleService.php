@@ -47,6 +47,11 @@ class ModuleService
 	public $client;
 
 	/**
+	 * Optional module for custom dataset (answers) providers
+	 */
+	public $customDatasetProvider;
+
+	/**
 	 * Collection Service, adapter for the modules aggregation service
 	 * @var App\Services\AggregationService
 	 */
@@ -72,6 +77,11 @@ class ModuleService
 
 		$this->client = new RequestService($module);
 		$this->collector = new CollectionService($module, $this->client, $this->filterParameter);
+
+		if (!empty(config('modules.' . $this->module . '.dataset-provider'))) {
+			$datasetProvider = config('modules.' . $this->module . '.dataset-provider');
+			$this->customDatasetProvider = new ModuleService($datasetProvider, $cadsIds, $timespans);
+		}
 	}
 
 	public function supportedTabs ($taskId)
@@ -86,6 +96,18 @@ class ModuleService
 	 */
 	public function countDatasets ($taskId = null)
 	{
+		if ($this->customDatasetProvider) {
+			if (is_null($taskId)) {
+				return $this->customDatasetProvider->countDatasets();
+			}
+			$taskIdMap = config('modules.' . $this->module . '.dataset-id-mapping.task', []);
+			$customTestId = array_search($taskId, $taskIdMap, true);
+			if (empty($customTestId)) {
+				\Log::warning('Could not find mapping info for custom task id', ['id' => $taskId]);
+				return [];
+			}
+			return $this->customDatasetProvider->countDatasets($customTestId);
+		}
 		if (is_null($taskId))
 			$route = $this->api['tasks-count-datasets'];
 		else
@@ -120,6 +142,19 @@ class ModuleService
 			},
 			$this->requestJson($route)
 		);
+
+		if ($this->customDatasetProvider) {
+			$datasetProviderTasks = $this->customDatasetProvider->tasks();
+			$taskIdMap = config('modules.' . $this->module . '.dataset-id-mapping.task', []);
+			foreach ($datasetProviderTasks as &$dataset) {
+				if (!isset($taskIdMap[$dataset['id']])) {
+					\Log::warn('Found resource without mapping', ['type' => 'task', 'originalId' => $dataset['id']]);
+					continue;
+				}
+				$dataset['id'] = $taskIdMap[$dataset['id']];
+			}
+			return $datasetProviderTasks;
+		}
 		return $tasks;
 	}
 
@@ -156,8 +191,9 @@ class ModuleService
 	{
 		if (is_null($cadsIds))
 			$cadsIds = [];
-		else
+		else if (!is_array($cadsIds)) {
 			$cadsIds = explode(',', $cadsIds);
+		}
 		return $cadsIds;
 	}
 

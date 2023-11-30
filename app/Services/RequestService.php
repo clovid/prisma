@@ -56,9 +56,6 @@ class RequestService {
 
 	public function getJson($url, $parameter = [])
 	{
-		Log::debug('Performed getJson', [
-			'parameter' => $parameter,
-		]);
 		return $this->requestJson('GET', $url, [
 			'query' => $parameter,
 			'headers' => [

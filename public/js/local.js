@@ -2531,14 +2531,15 @@
 		}
 	}
 
-	Controller.$inject = ['$log', '$rootScope', '$scope', '$timeout', 'userService', 'omeroService', 'cornerstoneService'];
+	Controller.$inject = ['$log', '$rootScope', '$scope', '$timeout', 'userService', 'omeroService', 'cornerstoneService', '$translate'];
 
-	function Controller ($log, $rootScope, $scope, $timeout, userService, omeroService, cornerstoneService) {
+	function Controller ($log, $rootScope, $scope, $timeout, userService, omeroService, cornerstoneService, $translate) {
 		var vm = this;
 		var activeSlice;
 
 		vm.$onInit = function() {
 			var activeSlice = vm.image.slices && vm.image.slices[vm.image.currentSlice];
+			vm.lang = $translate.use();
 			vm.state = {
 				image: {
 					visible: false,
@@ -2739,7 +2740,7 @@
 						omeroService.sendActionByInstanceId(vm.state.image.iframeId, 'show_annotations', {annotationIds: marks});
 						omeroService.sendActionByInstanceId(vm.state.image.iframeId, 'zoom_to_annotations', {annotationIds: marks});
 					} else if (vm.image.type === 'meta') {
-						cornerstoneService.sendActionByInstanceId(vm.state.image.iframeId, 'show_points', {points: config.marks.map(({x,y,z}) => [x,y,z])});
+						cornerstoneService.sendActionByInstanceId(vm.state.image.iframeId, 'show_points', {points: config.marks.map(({x,y,z}) => [x,y,z]), color: config.color});
 					} else {
 						var groupedMarks = _.reduce(config.marks, function (carry, item) {
 							if (!carry[item[2]]) {
@@ -3850,6 +3851,7 @@
 					imageId: vm.data.imageId,
 					questionId: vm.data.id,
 					marks: vm.data.marks,
+					color: vm.data.color,
 				});
 			}
 		}

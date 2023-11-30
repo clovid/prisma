@@ -45,14 +45,15 @@
 		}
 	}
 
-	Controller.$inject = ['$log', '$rootScope', '$scope', '$timeout', 'userService', 'omeroService', 'cornerstoneService'];
+	Controller.$inject = ['$log', '$rootScope', '$scope', '$timeout', 'userService', 'omeroService', 'cornerstoneService', '$translate'];
 
-	function Controller ($log, $rootScope, $scope, $timeout, userService, omeroService, cornerstoneService) {
+	function Controller ($log, $rootScope, $scope, $timeout, userService, omeroService, cornerstoneService, $translate) {
 		var vm = this;
 		var activeSlice;
 
 		vm.$onInit = function() {
 			var activeSlice = vm.image.slices && vm.image.slices[vm.image.currentSlice];
+			vm.lang = $translate.use();
 			vm.state = {
 				image: {
 					visible: false,

@@ -59,10 +59,16 @@ return [
         'client-secret' => env('MEDFORGE_OAUTH_CLIENT_SECRET'),
     ],
 
-    'vquest' => [
+    'vquest-local' => [
         'base-url' => env('VQUEST_API_URL'),
         'auth-type' => 'token',
         'api-token' => env('VQUEST_API_TOKEN'),
+    ],
+
+    'vquest' => [
+        'base-url' => env('VQUEST_ONLINE_API_URL'),
+        'auth-type' => 'token',
+        'api-token' => env('VQUEST_ONLINE_API_TOKEN'),
     ],
 
     'vquest-online' => [

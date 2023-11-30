@@ -19,20 +19,24 @@ class ApiController extends Controller
 		if (is_null($level)) {
 			$userModules = Auth::user()->modules;
 			$accountsForRootLevel = $userModules->map(function ($module) {
-				$accountProvider = config('modules.' . $module->name . '.account-provider');
-				if (!$accountProvider) {
-					try {
-						return AkzentoAPI::getAccounts() ?? [];
-					} catch (\Throwable $th) {
-						return [];
+					return config('modules.' . $module->name . '.account-provider');
+				})
+				->unique()
+				->map(function ($accountProvider) {
+					if (!$accountProvider) {
+						try {
+							return AkzentoAPI::getAccounts() ?? [];
+						} catch (\Throwable $th) {
+							return [];
+						}
 					}
-				}
-				return [[
-					'id' => $accountProvider . '|',
-					'name' =>  trans('modules.' . $accountProvider . '.title'),
-					'children' => $this->accountsFromProvider($accountProvider),
-				]];
-			})->flatten(1);
+					return [[
+						'id' => $accountProvider . '|',
+						'name' =>  trans('modules.' . $accountProvider . '.title'),
+						'children' => $this->accountsFromProvider($accountProvider),
+					]];
+				})
+				->flatten(1);
 			$accountsForLevel = $accountsForRootLevel->count() > 1 ? $accountsForRootLevel->values() : $accountsForRootLevel[0]['children'];
 		} else {
 			$levelWithPrefix = explode('|', $level);
